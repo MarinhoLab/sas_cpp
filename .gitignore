@@ -1,0 +1,16 @@
+# Build artifacts
+build/
+build-*/
+
+# Debian packaging build tree
+debian/.debhelper/
+debian/build/
+debian/debhelper-build-stamp
+debian/files
+debian/*.substvars
+debian/*.debhelper.log
+debian/libmarinholab-sas-core/
+*.deb
+*.dsc
+*.tar.*
+obj-*/

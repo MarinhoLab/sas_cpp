@@ -1,0 +1,29 @@
+Source: libmarinholab-sas-core
+Section: libs
+Priority: optional
+Maintainer: Murilo M Marinho <murilomarinho@ieee.org>
+Build-Depends: debhelper-compat (= 13),
+ dpkg-dev (>= 1.18.11),
+ cmake,
+ g++,
+ libeigen3-dev,
+ libdqrobotics
+Standards-Version: 4.6.2
+Homepage: https://github.com/MarinhoLab/sas_cpp
+
+Package: libmarinholab-sas-core
+Architecture: any
+Multi-Arch: same
+# libdqrobotics is a genuine runtime dependency of the shared library, but it
+# ships from the DQ Robotics PPA (not the Ubuntu archive), so dpkg-shlibdeps
+# cannot infer it. Declare it explicitly (unversioned, as PPA versions roll).
+Depends: libdqrobotics, ${shlibs:Depends}, ${misc:Depends}
+Description: ROS-free C++ core of the SmartArmStack
+ The marinholab_sas_core package provides the ROS-independent C++ core of
+ the SmartArmStack project: the Clock loop-timing utility, the ThreadManager
+ (real-time thread scheduling with statistics), the abstract RobotDriver
+ interface, the ShutdownSignaler and Eigen/DQ conversion helpers.
+ .
+ It is built with CMake and exposes the CMake target marinholab::sas::core
+ (namespace marinholab::sas::core). Examples are not installed; build them
+ directly from the source tree with -DMARINHO_LAB_SAS_CORE_BUILD_EXAMPLES=ON.

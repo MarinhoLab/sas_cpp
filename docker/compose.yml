@@ -1,0 +1,6 @@
+services:
+  marinholab_sas_core:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: /opt/sas_cpp/docker/build.sh
