@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+export CFLAGS   := $(shell dpkg-buildflags --get CFLAGS)
+export CXXFLAGS := $(shell dpkg-buildflags --get CXXFLAGS)
+export CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
+export LDFLAGS  := $(shell dpkg-buildflags --get LDFLAGS)
+
+%:
+	dh $@ --buildsystem=cmake
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DBUILD_SHARED_LIBS=ON \
+		-DMARINHO_LAB_SAS_CORE_BUILD_EXAMPLES=OFF

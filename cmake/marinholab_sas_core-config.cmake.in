@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+# The shared library links Eigen3 at runtime and consumers link the
+# dqrobotics library via the interface of marinholab::sas::core.
+include(CMakeFindDependencyMacro)
+find_dependency(Eigen3)
+
+include("${CMAKE_CURRENT_LIST_DIR}/marinholab_sas_core-targets.cmake")
+
+check_required_components(marinholab_sas_core)

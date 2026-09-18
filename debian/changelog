@@ -1,0 +1,5 @@
+libmarinholab-sas-core (26.09.00) noble; urgency=medium
+
+  * Initial ROS-free C++ package of the SmartArmStack core.
+
+ -- Murilo M Marinho <murilomarinho@ieee.org>  Tue, 15 Sep 2026 12:00:00 +0100
