@@ -5,15 +5,12 @@ Source: https://github.com/MarinhoLab/sas_cpp
 
 Files: *
 Copyright: 2016-2026 Murilo Marques Marinho
-License: LGPL-2.1+
- The Debian source of this package is licensed under the GNU Lesser
- General Public License, version 2.1 or later, as carried by the
- LICENSE file in the repository.
+License: LGPL-3.0+
 
-License: LGPL-2.1+
+License: LGPL-3.0+
  This package is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation; either version 2.1 of the License, or (at
+ the Free Software Foundation; either version 3 of the License, or (at
  your option) any later version.
  .
  This package is distributed in the hope that it will be useful, but
@@ -25,6 +22,6 @@ License: LGPL-2.1+
  along with this program. If not, see
  <https://www.gnu.org/licenses/>.
 
-# The full text of the license is available in the Debian package as
-# /usr/share/doc/libmarinholab-sas-core/copyright or in the repository
-# as the file LICENSE.
+The full text of the license is also shipped in this package under
+/usr/share/doc/libmarinholab-sas-core/ and in the repository as the file
+LICENSE.
