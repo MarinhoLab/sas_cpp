@@ -1,0 +1,41 @@
+name: Build (macOS)
+
+on: [push, pull_request]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install build dependencies
+        run: |
+          brew update
+          brew install cmake eigen
+
+      # dqrobotics has no macOS package; build it from source.
+      - name: Build & install dqrobotics
+        run: |
+          git clone --depth 1 https://github.com/dqrobotics/cpp.git
+          cmake -S dqrobotics/cpp -B dqrobotics/cpp/build \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_PREFIX_PATH="$(brew --prefix)"
+          cmake --build dqrobotics/cpp/build -j
+          cmake --install dqrobotics/cpp/build --prefix /usr/local
+
+      - name: Build marinholab_sas_core
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release \
+                -DDQROBOTICS_INCLUDE_DIR=/usr/local/include \
+                -DDQROBOTICS_LIBRARY=/usr/local/lib/libdqrobotics.dylib
+          cmake --build build -j
+
+      - name: Run examples
+        run: |
+          export DYLD_LIBRARY_PATH=/usr/local/lib
+          ./build/sas_core_example
+          ./build/sas_clock_example
+          ./build/sas_clock_sched_fifo_example
+          ./build/thread_manager_example
+          ./build/sas_robot_driver_example
