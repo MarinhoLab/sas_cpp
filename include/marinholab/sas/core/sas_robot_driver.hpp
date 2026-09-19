@@ -44,7 +44,7 @@
 #include <chrono>
 #include <marinholab/sas/core/sas_shutdown_signaler.hpp>
 #include <marinholab/sas/core/sas_clock.hpp>
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 
 using namespace Eigen;
 

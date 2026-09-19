@@ -27,7 +27,8 @@
  * @brief Example testing core utilities.
  */
 
-#include <eigen3/Eigen/Dense>
+#include <cassert>
+#include <Eigen/Dense>
 #include <marinholab/sas/core/sas_core.hpp>
 
 using namespace Eigen;

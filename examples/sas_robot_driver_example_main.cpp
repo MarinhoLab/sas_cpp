@@ -27,6 +27,7 @@
  * @brief C++ example showcasing a sample RobotDriver subclass.
  */
 #include <marinholab/sas/core/examples/sas_robot_driver_example.hpp>
+#include <cassert>
 #include <iostream>
 
 #include<signal.h>

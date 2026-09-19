@@ -32,6 +32,23 @@ The version is computed at build time by `tools/version.sh`; the first
 release after a new month starts at `.00` and rolls forward with each
 commit.
 
+## Platform compatibility
+
+- **Ubuntu / Linux** — full support, including the real-time scheduling
+  (`ThreadManager` priorities, CPU affinity) and the `SCHED_FIFO` example.
+- **macOS** — builds and runs. Real-time scheduling degrades gracefully:
+  `ThreadManager::apply_priority()` / `apply_cpu_affinity()` are Linux-only
+  (guarded by `#ifdef __linux__`), and the `SCHED_FIFO` example falls back to
+  default scheduling.
+- **Windows** — the library builds. The POSIX-only parts of `ThreadManager`
+  are guarded, and the `SCHED_FIFO` example compiles to a no-op timing loop.
+  Build `dqrobotics` from source with vcpkg (its CMake expects the vcpkg
+  toolchain).
+
+> [!NOTE]
+> The Debian package is only produced on Ubuntu. On macOS/Windows use CMake
+> directly or `FetchContent`.
+
 ## Building (CMake)
 
 ```bash
@@ -47,12 +64,19 @@ cmake --build build -j
 
 ### Prerequisites
 
-- Eigen3: `apt-get install libeigen3-dev`
-- dqrobotics: from the DQ Robotics PPA
-  (`add-apt-repository ppa:dqrobotics-dev/development && apt-get install libdqrobotics`)
+- Eigen3:
+  - Ubuntu: `apt-get install libeigen3-dev`
+  - macOS: `brew install eigen`
+  - Windows: `vcpkg install eigen3`
+- dqrobotics:
+  - Ubuntu: from the DQ Robotics PPA
+    (`add-apt-repository ppa:dqrobotics-dev/development && apt-get install libdqrobotics`)
+  - macOS / Windows: build from
+    [dqrobotics/cpp](https://github.com/dqrobotics/cpp) with CMake
+    (`cmake -S cpp -B cpp/build && cmake --build cpp/build && cmake --install cpp/build`)
 - Note: the dqrobotics headers use `<Eigen/Dense>` without the `eigen3/`
   prefix; if that does not resolve on your system, create the symlink
-  `ln -s /usr/include/eigen3/Eigen /usr/include/Eigen`.
+  `ln -s /usr/include/eigen3/Eigen /usr/include/Eigen` (Ubuntu only).
 
 ### Using it from another CMake project
 

@@ -29,6 +29,13 @@
 
 #include <iostream>
 
+#if !defined(_WIN32)
+#include <cerrno>
+#include <cstring>
+#include <pthread.h>
+#include <sched.h>
+#endif
+
 #include <marinholab/sas/core/sas_clock.hpp>
 
 int main(int, char**)
@@ -38,6 +45,7 @@ int main(int, char**)
     //Alternatively, use marinholab::sas::core::Clock clock(0.01,false); to disable automatic statistics calculation.
     //They do not take much time, but might affect whatever it is that we're trying to time.
 
+#if !defined(_WIN32)
     //Set the communication thread to be realtime with SCHED_FIFO.
     sched_param sch;
     int policy;
@@ -46,6 +54,12 @@ int main(int, char**)
     if (pthread_setschedparam(pthread_self(), SCHED_FIFO, &sch)) {
         std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
     }
+#else
+    // Real-time scheduling (SCHED_FIFO) is not available on this platform;
+    // the loop below still exercises the Clock timing path.
+    std::cout << "Note: SCHED_FIFO not available on this platform; "
+                 "running the timing loop with default scheduling." << std::endl;
+#endif
 
     // Always initialize right before the loop, to reduce slowdown in the object allocation/initialization.
     clock.init();
