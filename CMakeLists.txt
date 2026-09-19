@@ -26,14 +26,24 @@ find_package(Eigen3 REQUIRED)
 # the path-qualified name. We fail early and with a clear message if it is absent.
 find_path(DQROBOTICS_INCLUDE_DIR
     NAMES dqrobotics/DQ.h
-    PATHS /usr /usr/local)
+    PATHS /usr /usr/local /opt/homebrew
+    HINTS ENV CMAKE_PREFIX_PATH)
 find_library(DQROBOTICS_LIBRARY
     NAMES dqrobotics
-    PATHS /usr /usr/local)
+    PATHS /usr /usr/local /opt/homebrew
+    HINTS ENV CMAKE_PREFIX_PATH)
 if(NOT DQROBOTICS_INCLUDE_DIR OR NOT DQROBOTICS_LIBRARY)
     message(FATAL_ERROR "dqrobotics not found (looked for dqrobotics/DQ.h and libdqrobotics). "
-                        "Install it from https://launchpad.net/~dqrobotics-dev/+archive/ubuntu/development")
+                        "Install it from https://launchpad.net/~dqrobotics-dev/+archive/ubuntu/development "
+                        "or build it from https://github.com/dqrobotics/cpp")
 endif()
+
+# Model dqrobotics as an imported target so its include dir and library location
+# are carried through the build/install regardless of the install prefix.
+add_library(dqrobotics::dqrobotics UNKNOWN IMPORTED GLOBAL)
+set_target_properties(dqrobotics::dqrobotics PROPERTIES
+    IMPORTED_LOCATION "${DQROBOTICS_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${DQROBOTICS_INCLUDE_DIR}")
 
 # ---- Library (shared by default; build static with -DBUILD_SHARED_LIBS=OFF) ----
 add_library(marinholab_sas_core
@@ -64,7 +74,7 @@ target_include_directories(marinholab_sas_core PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(marinholab_sas_core PUBLIC Eigen3::Eigen -ldqrobotics)
+target_link_libraries(marinholab_sas_core PUBLIC Eigen3::Eigen dqrobotics::dqrobotics)
 
 # ---- Examples ----
 if(MARINHO_LAB_SAS_CORE_BUILD_EXAMPLES)

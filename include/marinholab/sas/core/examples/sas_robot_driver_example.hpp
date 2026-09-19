@@ -33,7 +33,7 @@
 
 #include <marinholab/sas/core/sas_shutdown_signaler.hpp>
 #include <marinholab/sas/core/sas_robot_driver.hpp>
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 
 using namespace Eigen;
 
