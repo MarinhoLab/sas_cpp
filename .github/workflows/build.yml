@@ -1,0 +1,17 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: build
+        run: |
+          cd docker
+          docker compose build
+      - name: run
+        run: |
+          cd docker
+          docker compose run --rm marinholab_sas_core
