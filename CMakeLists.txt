@@ -21,29 +21,44 @@ endif()
 
 find_package(Eigen3 REQUIRED)
 
-# dqrobotics does not ship a CMake package: locate its header and library manually.
-# The public header lives at <prefix>/include/dqrobotics/DQ.h, so we search for
-# the path-qualified name. We fail early and with a clear message if it is absent.
-find_path(DQROBOTICS_INCLUDE_DIR
-    NAMES dqrobotics/DQ.h
-    PATHS /usr /usr/local /opt/homebrew
-    HINTS ENV CMAKE_PREFIX_PATH)
-find_library(DQROBOTICS_LIBRARY
-    NAMES dqrobotics
-    PATHS /usr /usr/local /opt/homebrew
-    HINTS ENV CMAKE_PREFIX_PATH)
-if(NOT DQROBOTICS_INCLUDE_DIR OR NOT DQROBOTICS_LIBRARY)
-    message(FATAL_ERROR "dqrobotics not found (looked for dqrobotics/DQ.h and libdqrobotics). "
-                        "Install it from https://launchpad.net/~dqrobotics-dev/+archive/ubuntu/development "
-                        "or build it from https://github.com/dqrobotics/cpp")
-endif()
+# Prefer an in-tree dqrobotics target when the parent project has already
+# built one via add_subdirectory (this is the default for the sas_py wheel
+# build, matching working-needlemanipulation); otherwise fall back to
+# locating an installed copy.
+if(TARGET dqrobotics)
+    # Wrap the in-tree target so its usage requirements (headers, the
+    # library to link, MSVC debug/release mapping) propagate to
+    # marinholab_sas_core and to anything that links marinholab_sas_core.
+    add_library(dqrobotics::dqrobotics INTERFACE IMPORTED GLOBAL)
+    set_target_properties(dqrobotics::dqrobotics PROPERTIES
+        INTERFACE_LINK_LIBRARIES "dqrobotics")
+else()
+    # dqrobotics does not ship a CMake package: locate its header and library
+    # manually. The public header lives at <prefix>/include/dqrobotics/DQ.h,
+    # so we search for the path-qualified name. We fail early and with a
+    # clear message if it is absent.
+    find_path(DQROBOTICS_INCLUDE_DIR
+        NAMES dqrobotics/DQ.h
+        PATHS /usr /usr/local /opt/homebrew
+        HINTS ENV CMAKE_PREFIX_PATH)
+    find_library(DQROBOTICS_LIBRARY
+        NAMES dqrobotics
+        PATHS /usr /usr/local /opt/homebrew
+        HINTS ENV CMAKE_PREFIX_PATH)
+    if(NOT DQROBOTICS_INCLUDE_DIR OR NOT DQROBOTICS_LIBRARY)
+        message(FATAL_ERROR "dqrobotics not found (looked for dqrobotics/DQ.h and libdqrobotics). "
+                            "Install it from https://launchpad.net/~dqrobotics-dev/+archive/ubuntu/development "
+                            "or build it from https://github.com/dqrobotics/cpp")
+    endif()
 
-# Model dqrobotics as an imported target so its include dir and library location
-# are carried through the build/install regardless of the install prefix.
-add_library(dqrobotics::dqrobotics UNKNOWN IMPORTED GLOBAL)
-set_target_properties(dqrobotics::dqrobotics PROPERTIES
-    IMPORTED_LOCATION "${DQROBOTICS_LIBRARY}"
-    INTERFACE_INCLUDE_DIRECTORIES "${DQROBOTICS_INCLUDE_DIR}")
+    # Model the installed library as an imported target so its include dir
+    # and library location are carried through the build/install regardless
+    # of the install prefix.
+    add_library(dqrobotics::dqrobotics UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(dqrobotics::dqrobotics PROPERTIES
+        IMPORTED_LOCATION "${DQROBOTICS_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${DQROBOTICS_INCLUDE_DIR}")
+endif()
 
 # ---- Library (shared by default; build static with -DBUILD_SHARED_LIBS=OFF) ----
 add_library(marinholab_sas_core
