@@ -22,7 +22,7 @@ jobs:
                 -DCMAKE_BUILD_TYPE=Release \
                 -DCMAKE_PREFIX_PATH="$(brew --prefix)"
           cmake --build dqrobotics/cpp/build -j
-          cmake --install dqrobotics/cpp/build --prefix /usr/local
+          sudo cmake --install dqrobotics/cpp/build --prefix /usr/local
 
       - name: Build marinholab_sas_core
         run: |
