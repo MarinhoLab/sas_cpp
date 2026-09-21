@@ -18,7 +18,7 @@ jobs:
 
       - name: Build & install dqrobotics
         run: |
-          git clone --depth 1 https://github.com/dqrobotics/cpp.git
+          git clone --depth 1 https://github.com/dqrobotics/cpp.git dqrobotics/cpp
           cmake -S dqrobotics/cpp -B dqrobotics/cpp/build ^
                 -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ^
                 -DVCPKG_TARGET_TRIPLET=x64-windows ^
@@ -34,7 +34,7 @@ jobs:
                 -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ^
                 -DVCPKG_TARGET_TRIPLET=x64-windows ^
                 -DDQROBOTICS_INCLUDE_DIR=C:/dqrobotics/include ^
-                -DDQROBOTICS_LIBRARY=C:/dqrobotics/lib/Release/dqrobotics.lib
+                -DDQROBOTICS_LIBRARY=C:/dqrobotics/lib/dqrobotics.lib
           cmake --build build --config Release -j
 
       - name: Run examples
