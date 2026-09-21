@@ -33,6 +33,7 @@ jobs:
         run: |
           cmake -B build ^
                 -DCMAKE_BUILD_TYPE=Release ^
+                -DBUILD_SHARED_LIBS=OFF ^
                 -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ^
                 -DVCPKG_TARGET_TRIPLET=x64-windows ^
                 -DDQROBOTICS_INCLUDE_DIR=C:/dqrobotics/include ^
@@ -40,6 +41,8 @@ jobs:
           cmake --build build --config Release -j
 
       - name: Run examples
+        env:
+          PATH: ${{ env.PATH }};C:\dqrobotics\bin
         run: |
           .\build\Release\sas_core_example.exe
           .\build\Release\sas_clock_example.exe
