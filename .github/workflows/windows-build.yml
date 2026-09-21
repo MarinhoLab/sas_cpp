@@ -17,6 +17,7 @@ jobs:
           C:/vcpkg/./vcpkg install eigen3:x64-windows
 
       - name: Build & install dqrobotics
+        shell: cmd
         run: |
           git clone --depth 1 https://github.com/dqrobotics/cpp.git dqrobotics/cpp
           cmake -S dqrobotics/cpp -B dqrobotics/cpp/build ^
@@ -28,6 +29,7 @@ jobs:
           cmake --install dqrobotics/cpp/build --config Release
 
       - name: Build marinholab_sas_core
+        shell: cmd
         run: |
           cmake -B build ^
                 -DCMAKE_BUILD_TYPE=Release ^
