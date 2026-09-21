@@ -17,7 +17,7 @@ jobs:
       # dqrobotics has no macOS package; build it from source.
       - name: Build & install dqrobotics
         run: |
-          git clone --depth 1 https://github.com/dqrobotics/cpp.git
+          git clone --depth 1 https://github.com/dqrobotics/cpp.git dqrobotics/cpp
           cmake -S dqrobotics/cpp -B dqrobotics/cpp/build \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DCMAKE_PREFIX_PATH="$(brew --prefix)"
