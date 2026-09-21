@@ -140,7 +140,7 @@ double Clock::get_elapsed_time_sec() const
 
 void Clock::safe_sleep_seconds(const double& seconds, std::atomic_bool* break_loop)
 {
-    for(int i=0;i<int(seconds/get_desired_thread_sampling_time_sec()) && not (*break_loop);i++)
+    for(int i=0;i<int(seconds/get_desired_thread_sampling_time_sec()) && !(*break_loop);i++)
     {
         update_and_sleep();
     }
@@ -168,7 +168,7 @@ double Clock::get_time(const TimeType &time_type) const
 
 double Clock::get_statistics(const Statistics& statistics, const TimeType& time_type) const
 {
-    if(not enable_statistics_)
+    if(!enable_statistics_)
         throw std::runtime_error("Statistics were not enabled, get_statistics will not return a valid value");
     if(statistics_map_.count({time_type,statistics})<=0)
         throw std::runtime_error("Requested statistics is not available.");
