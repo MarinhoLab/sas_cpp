@@ -55,6 +55,7 @@ add_library(marinholab_sas_core
     src/sas_robot_driver_example.cpp
     src/eigen3_std_conversions.cpp
     src/sas_thread_manager.cpp
+    src/serial_manipulator_simulator_friendly.cpp
 )
 add_library(marinholab::sas::core ALIAS marinholab_sas_core)
 
