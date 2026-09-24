@@ -39,7 +39,7 @@ namespace marinholab::sas::core::modeling
 {
 
 // Free functions/constants from dqrobotics used by the implementation. (The
-// types DQ/VectorXd/MatrixXd are already in scope via the header / the
+// types DQ/Eigen::VectorXd/Eigen::MatrixXd are already in scope via the header / the
 // dqrobotics headers' global-namespace injection.)
 using DQ_robotics::Ad;
 using DQ_robotics::C8;
@@ -71,8 +71,8 @@ SerialManipulatorSimulatorFriendly::SerialManipulatorSimulatorFriendly(const std
     // ``kDefaultJointLimit`` is a large (practically unbounded) value in
     // radians, the unit used for joint positions throughout dqrobotics.
     static constexpr double kDefaultJointLimit = 10.0;
-    lower_q_limit_ = VectorXd::Constant(actuation_types_.size(), -kDefaultJointLimit);
-    upper_q_limit_ = VectorXd::Constant(actuation_types_.size(), kDefaultJointLimit);
+    lower_q_limit_ = Eigen::VectorXd::Constant(actuation_types_.size(), -kDefaultJointLimit);
+    upper_q_limit_ = Eigen::VectorXd::Constant(actuation_types_.size(), kDefaultJointLimit);
 }
 
 DQ SerialManipulatorSimulatorFriendly::_joint_transformation(const double &q, const int &ith) const
@@ -149,7 +149,7 @@ DQ SerialManipulatorSimulatorFriendly::_get_w(const int &ith) const
     throw std::runtime_error("Invalid actuation");
 }
 
-DQ  SerialManipulatorSimulatorFriendly::raw_fkm(const VectorXd& q_vec, const int& to_ith_link) const
+DQ  SerialManipulatorSimulatorFriendly::raw_fkm(const Eigen::VectorXd& q_vec, const int& to_ith_link) const
 {
     _check_q_vec(q_vec);
     _check_to_ith_link(to_ith_link);
@@ -163,12 +163,12 @@ DQ  SerialManipulatorSimulatorFriendly::raw_fkm(const VectorXd& q_vec, const int
 }
 
 
-MatrixXd SerialManipulatorSimulatorFriendly::raw_pose_jacobian(const VectorXd &q_vec, const int &to_ith_link) const
+Eigen::MatrixXd SerialManipulatorSimulatorFriendly::raw_pose_jacobian(const Eigen::VectorXd &q_vec, const int &to_ith_link) const
 {
     _check_q_vec(q_vec);
     _check_to_ith_link(to_ith_link);
 
-    MatrixXd J = MatrixXd::Zero(8,to_ith_link+1);
+    Eigen::MatrixXd J = Eigen::MatrixXd::Zero(8,to_ith_link+1);
     DQ x_effector = raw_fkm(q_vec,to_ith_link);
 
     DQ x(1);
@@ -184,7 +184,7 @@ MatrixXd SerialManipulatorSimulatorFriendly::raw_pose_jacobian(const VectorXd &q
     return J;
 }
 
-MatrixXd SerialManipulatorSimulatorFriendly::raw_pose_jacobian_derivative(const VectorXd &q, const VectorXd &q_dot, const int &to_ith_link) const
+Eigen::MatrixXd SerialManipulatorSimulatorFriendly::raw_pose_jacobian_derivative(const Eigen::VectorXd &q, const Eigen::VectorXd &q_dot, const int &to_ith_link) const
 {
     _check_q_vec(q);
     _check_q_vec(q_dot);
@@ -192,10 +192,10 @@ MatrixXd SerialManipulatorSimulatorFriendly::raw_pose_jacobian_derivative(const 
 
     int n = to_ith_link+1;
     DQ x_effector = raw_fkm(q,to_ith_link);
-    MatrixXd J    = raw_pose_jacobian(q,to_ith_link);
-    VectorXd vec_x_effector_dot = J*q_dot.head(n);
+    Eigen::MatrixXd J    = raw_pose_jacobian(q,to_ith_link);
+    Eigen::VectorXd vec_x_effector_dot = J*q_dot.head(n);
     DQ x = DQ(1);
-    MatrixXd J_dot = MatrixXd::Zero(8,n);
+    Eigen::MatrixXd J_dot = Eigen::MatrixXd::Zero(8,n);
     int jth=0;
 
     for(int i=0;i<n;i++)
@@ -203,10 +203,10 @@ MatrixXd SerialManipulatorSimulatorFriendly::raw_pose_jacobian_derivative(const 
         const DQ w = _get_w(i);
         const DQ z = 0.5*x*w*conj(x);
 
-        VectorXd vec_zdot;
+        Eigen::VectorXd vec_zdot;
         if(i==0)
         {
-            vec_zdot = VectorXd::Zero(8,1);
+            vec_zdot = Eigen::VectorXd::Zero(8,1);
         }
         else
         {

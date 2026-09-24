@@ -35,7 +35,6 @@
 #include<Eigen/Dense>
 #include<dqrobotics/DQ.h>
 
-using namespace Eigen;
 using namespace DQ_robotics;
 
 namespace marinholab::sas::core
@@ -45,28 +44,28 @@ namespace marinholab::sas::core
  * @param vectorxd Source Eigen vector.
  * @return std::vector<double> containing the same elements in order.
  */
-std::vector<double> vectorxd_to_std_vector_double(const VectorXd& vectorxd);
+std::vector<double> vectorxd_to_std_vector_double(const Eigen::VectorXd& vectorxd);
 
 /**
  * @brief Convert an Eigen::VectorXi to a std::vector<int>.
  * @param vectorxi Source Eigen integer vector.
  * @return std::vector<int> containing the same elements in order.
  */
-std::vector<int>    vectorxi_to_std_vector_int(const VectorXi& vectorxi);
+std::vector<int>    vectorxi_to_std_vector_int(const Eigen::VectorXi& vectorxi);
 
 /**
  * @brief Convert a std::vector<double> to an Eigen::VectorXd.
  * @param std_vector_double Source std::vector<double>.
- * @return VectorXd containing the same elements.
+ * @return Eigen::VectorXd containing the same elements.
  */
-VectorXd            std_vector_double_to_vectorxd(std::vector<double> std_vector_double);
+Eigen::VectorXd            std_vector_double_to_vectorxd(std::vector<double> std_vector_double);
 
 /**
  * @brief Convert a std::vector<int> to an Eigen::VectorXi.
  * @param std_vector_int Source std::vector<int>.
- * @return VectorXi containing the same elements.
+ * @return Eigen::VectorXi containing the same elements.
  */
-VectorXi            std_vector_int_to_vectorxi(std::vector<int> std_vector_int);
+Eigen::VectorXi            std_vector_int_to_vectorxi(std::vector<int> std_vector_int);
 
 /**
  * @brief Convert a std::vector<double> to a DQ (dual quaternion) object.

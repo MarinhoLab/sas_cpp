@@ -33,24 +33,24 @@ namespace marinholab::sas::core
 {
 
 /**
- * @brief concatenate two VectorXd.
- * @param a a VectorXd.
- * @param b a VectorXd.
+ * @brief concatenate two Eigen::VectorXd.
+ * @param a a Eigen::VectorXd.
+ * @param b a Eigen::VectorXd.
  * @return the result of the concatenated vectors.
  */
-VectorXd concatenate(const VectorXd& a, const VectorXd& b)
+Eigen::VectorXd concatenate(const Eigen::VectorXd& a, const Eigen::VectorXd& b)
 {
-    return (VectorXd (a.size() + b.size()) << a, b).finished();
+    return (Eigen::VectorXd (a.size() + b.size()) << a, b).finished();
 }
 
 /**
- * @brief concatenate a std::vector of VectorXd.
- * @param a an std::vector of VectorXd.
+ * @brief concatenate a std::vector of Eigen::VectorXd.
+ * @param a an std::vector of Eigen::VectorXd.
  * @return the result of the concatenated vectors.
  */
-VectorXd concatenate(const std::vector<VectorXd>& as)
+Eigen::VectorXd concatenate(const std::vector<Eigen::VectorXd>& as)
 {
-    VectorXd b;
+    Eigen::VectorXd b;
     for(const auto& c : as)
     {
         b = concatenate(b, c);
@@ -59,20 +59,20 @@ VectorXd concatenate(const std::vector<VectorXd>& as)
 }
 
 /**
- * @brief vstack vertically (row-wise) stack two MatrixXd.
- * @param A the first MatrixXd.
- * @param B the second MatrixXd.
- * @return the vstacked MatrixXd.
+ * @brief vstack vertically (row-wise) stack two Eigen::MatrixXd.
+ * @param A the first Eigen::MatrixXd.
+ * @param B the second Eigen::MatrixXd.
+ * @return the vstacked Eigen::MatrixXd.
  * @exception a std::range_error if @a A and @a B don't have
  * the same number of columns.
  * @note returns an empty matrix if both arguments are empty
  * or return the other argument of only one of the arguments
  * is empty.
  */
-MatrixXd vstack(const MatrixXd& A, const MatrixXd& B)
+Eigen::MatrixXd vstack(const Eigen::MatrixXd& A, const Eigen::MatrixXd& B)
 {
     if((A.size() == 0) && (B.size()==0))
-        return MatrixXd();
+        return Eigen::MatrixXd();
     if(A.size() == 0)
         return B;
     if(B.size() == 0)
@@ -80,23 +80,23 @@ MatrixXd vstack(const MatrixXd& A, const MatrixXd& B)
     if(A.cols()!=B.cols())
         throw std::range_error("vstack needs inputs a and b with the same number of columns.");
 
-    return(MatrixXd(A.rows()+B.rows(),A.cols()) << A, B).finished();
+    return(Eigen::MatrixXd(A.rows()+B.rows(),A.cols()) << A, B).finished();
 }
 
 /**
  * @brief block_diag creates a block diagonal matrix
- * using an input of std::vector<MatrixXd>.
+ * using an input of std::vector<Eigen::MatrixXd>.
  * e.g. if As= [A, B, C],
  * then
  * block_diag(As) =
  * |A 0 0|
  * |0 B 0|
  * |0 0 C|
- * @param As the std::vector<MatrixXd> contaning
+ * @param As the std::vector<Eigen::MatrixXd> contaning
  * the matrix to form the block diagonal matrix.
  * @return the block diagonal matrix.
  */
-MatrixXd block_diag(const std::vector<MatrixXd>& As)
+Eigen::MatrixXd block_diag(const std::vector<Eigen::MatrixXd>& As)
 {
     int rows = 0;
     int cols = 0;
@@ -106,7 +106,7 @@ MatrixXd block_diag(const std::vector<MatrixXd>& As)
         cols+=A.cols();
     }
 
-    MatrixXd B = MatrixXd::Zero(rows,cols);
+    Eigen::MatrixXd B = Eigen::MatrixXd::Zero(rows,cols);
     int start_row = 0;
     int start_col = 0;
     for(const auto& A : As)
@@ -124,15 +124,15 @@ MatrixXd block_diag(const std::vector<MatrixXd>& As)
 }
 
 /**
- * @brief split splits the input VectorXd @a as into a set of subvectors
+ * @brief split splits the input Eigen::VectorXd @a as into a set of subvectors
  * defined by ns.
- * @param as the VectorXd to be split.
+ * @param as the Eigen::VectorXd to be split.
  * @param ns the sizes of the subvectors.
- * @return an std::vector<VectorXd> of the splitted vectors.
+ * @return an std::vector<Eigen::VectorXd> of the splitted vectors.
  */
-std::vector<VectorXd> split(const VectorXd& a, const std::vector<int>& ns)
+std::vector<Eigen::VectorXd> split(const Eigen::VectorXd& a, const std::vector<int>& ns)
 {
-    std::vector<VectorXd> as;
+    std::vector<Eigen::VectorXd> as;
     int n_acc = 0;
     for(const auto& n : ns)
     {

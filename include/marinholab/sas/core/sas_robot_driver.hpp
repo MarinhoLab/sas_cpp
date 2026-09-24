@@ -46,7 +46,6 @@
 #include <marinholab/sas/core/sas_clock.hpp>
 #include <Eigen/Dense>
 
-using namespace Eigen;
 
 namespace marinholab::sas::core
 {
@@ -61,9 +60,9 @@ class RobotDriver
 protected:
     std::atomic_bool* break_loops_; //Deprecated
     std::shared_ptr<ShutdownSignaler> shutdown_signaler_;
-    std::tuple<VectorXd, VectorXd> joint_limits_;
-    VectorXd joint_velocities_;
-    VectorXd joint_torques_;
+    std::tuple<Eigen::VectorXd, Eigen::VectorXd> joint_limits_;
+    Eigen::VectorXd joint_velocities_;
+    Eigen::VectorXd joint_torques_;
 
     std::unique_ptr<marinholab::sas::core::Clock> clock_;
     std::unique_ptr<std::thread> watchdog_thread_;
@@ -111,53 +110,53 @@ protected:
      * @brief Get current joint positions
      * @return Vector of joint positions (radians)
      */
-    virtual VectorXd get_joint_positions() = 0;
+    virtual Eigen::VectorXd get_joint_positions() = 0;
 
     /**
      * @brief Set target joint positions
      * @param set_target_joint_positions_rad Target joint positions (radians)
      */
-    virtual void set_target_joint_positions(const VectorXd& set_target_joint_positions_rad) = 0;
+    virtual void set_target_joint_positions(const Eigen::VectorXd& set_target_joint_positions_rad) = 0;
 
     /**
      * @brief Get current joint velocities
      * @return Vector of joint velocities
      * @throws std::runtime_error if the default implementation is called (not implemented by derived driver)
      */
-    virtual VectorXd get_joint_velocities();
+    virtual Eigen::VectorXd get_joint_velocities();
 
     /**
      * @brief Set target joint velocities
      * @param set_target_joint_velocities Target joint velocities
      * @throws std::runtime_error if the default implementation is called (not implemented by derived driver)
      */
-    virtual void set_target_joint_velocities(const VectorXd& set_target_joint_velocities);
+    virtual void set_target_joint_velocities(const Eigen::VectorXd& set_target_joint_velocities);
 
     /**
      * @brief Get current joint torques
      * @return Vector of joint torques
      * @throws std::runtime_error if the default implementation is called (not implemented by derived driver)
      */
-    virtual VectorXd get_joint_torques();
+    virtual Eigen::VectorXd get_joint_torques();
 
     /**
      * @brief Set target joint torques
      * @param set_target_joint_torques Target joint torques
      * @throws std::runtime_error if the default implementation is called (not implemented by derived driver)
      */
-    virtual void set_target_joint_torques(const VectorXd& set_target_joint_torques);
+    virtual void set_target_joint_torques(const Eigen::VectorXd& set_target_joint_torques);
 
     /**
      * @brief Get joint limits (min, max)
      * @return Tuple of (min_limits, max_limits)
      */
-    virtual std::tuple<VectorXd, VectorXd> get_joint_limits();
+    virtual std::tuple<Eigen::VectorXd, Eigen::VectorXd> get_joint_limits();
 
     /**
      * @brief Set joint limits (min, max)
      * @param joint_limits Tuple of (min_limits, max_limits)
      */
-    virtual void set_joint_limits(const std::tuple<VectorXd, VectorXd>& joint_limits);
+    virtual void set_joint_limits(const std::tuple<Eigen::VectorXd, Eigen::VectorXd>& joint_limits);
 
     /**
      * @brief Start the watchdog thread with the given period

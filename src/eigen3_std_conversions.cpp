@@ -31,13 +31,13 @@
 namespace marinholab::sas::core
 {
 
-std::vector<double> vectorxd_to_std_vector_double(const VectorXd& vectorxd)
+std::vector<double> vectorxd_to_std_vector_double(const Eigen::VectorXd& vectorxd)
 {
     std::vector<double> vec(vectorxd.data(), vectorxd.data() + vectorxd.rows() * vectorxd.cols());
     return vec;
 }
 
-VectorXd std_vector_double_to_vectorxd(std::vector<double> std_vector_double)
+Eigen::VectorXd std_vector_double_to_vectorxd(std::vector<double> std_vector_double)
 {
     double* ptr = &std_vector_double[0];
     Eigen::Map<Eigen::VectorXd> vec(ptr,std_vector_double.size()); //We need access to the pointer here so we cannot use const ref
@@ -49,13 +49,13 @@ DQ std_vector_double_to_dq(const std::vector<double> &std_vector_double)
     return DQ(std_vector_double_to_vectorxd(std_vector_double));
 }
 
-std::vector<int> vectorxi_to_std_vector_int(const VectorXi &vectorxi)
+std::vector<int> vectorxi_to_std_vector_int(const Eigen::VectorXi &vectorxi)
 {
     std::vector<int> vec(vectorxi.data(), vectorxi.data() + vectorxi.rows() * vectorxi.cols());
     return vec;
 }
 
-VectorXi std_vector_int_to_vectorxi(std::vector<int> std_vector_int)
+Eigen::VectorXi std_vector_int_to_vectorxi(std::vector<int> std_vector_int)
 {
     int* ptr = &std_vector_int[0];
     Eigen::Map<Eigen::VectorXi> vec(ptr,std_vector_int.size()); //We need access to the pointer here so we cannot use const ref

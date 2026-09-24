@@ -31,39 +31,38 @@
 #include <Eigen/Dense>
 #include <marinholab/sas/core/sas_core.hpp>
 
-using namespace Eigen;
 using namespace marinholab::sas::core;
 
 int main(int,char**)
 {
-    //VectorXd concatenate(const VectorXd& a, const VectorXd& b);
-    VectorXd a(3); a << 1,2,3;
-    VectorXd b(3); b << 4,5,6;
-    VectorXd c(6); c << 1,2,3,4,5,6;
+    //Eigen::VectorXd concatenate(const Eigen::VectorXd& a, const Eigen::VectorXd& b);
+    Eigen::VectorXd a(3); a << 1,2,3;
+    Eigen::VectorXd b(3); b << 4,5,6;
+    Eigen::VectorXd c(6); c << 1,2,3,4,5,6;
     assert((concatenate(a,b)==c));
 
-    //VectorXd concatenate(const std::vector<VectorXd>& as);
+    //Eigen::VectorXd concatenate(const std::vector<Eigen::VectorXd>& as);
     auto as = {a,b};
     assert((concatenate(as)==c));
 
-    //MatrixXd vstack(const MatrixXd& A, const MatrixXd& B);
-    MatrixXd A(2,2); A << 1,2,3,4;
-    MatrixXd B(2,2); B << 5,6,7,8;
-    MatrixXd C(4,2); C << A,B;
+    //Eigen::MatrixXd vstack(const Eigen::MatrixXd& A, const Eigen::MatrixXd& B);
+    Eigen::MatrixXd A(2,2); A << 1,2,3,4;
+    Eigen::MatrixXd B(2,2); B << 5,6,7,8;
+    Eigen::MatrixXd C(4,2); C << A,B;
     assert((vstack(A,B)==C));
 
-    //MatrixXd block_diag(const std::vector<MatrixXd>& As);
+    //Eigen::MatrixXd block_diag(const std::vector<Eigen::MatrixXd>& As);
     auto As = {A,B};
-    MatrixXd C_block_diag(4,4); C_block_diag << A,MatrixXd::Zero(2,2),MatrixXd::Zero(2,2),B;
+    Eigen::MatrixXd C_block_diag(4,4); C_block_diag << A,Eigen::MatrixXd::Zero(2,2),Eigen::MatrixXd::Zero(2,2),B;
     assert((block_diag(As)==C_block_diag));
 
-    //std::vector<VectorXd> split(const VectorXd& a, const std::vector<int>& ns);
-    VectorXd a_split(10); a_split << 1,2,3,4,5,6,7,8,9,10;
+    //std::vector<Eigen::VectorXd> split(const Eigen::VectorXd& a, const std::vector<int>& ns);
+    Eigen::VectorXd a_split(10); a_split << 1,2,3,4,5,6,7,8,9,10;
     std::vector<int> ns = {2,5,3};
     auto split_result = split(a_split,ns);
-    assert((split_result[0]==(VectorXd(2)<<1,2).finished()));
-    assert((split_result[1]==(VectorXd(5)<<3,4,5,6,7).finished()));
-    assert((split_result[2]==(VectorXd(3)<<8,9,10).finished()));
+    assert((split_result[0]==(Eigen::VectorXd(2)<<1,2).finished()));
+    assert((split_result[1]==(Eigen::VectorXd(5)<<3,4,5,6,7).finished()));
+    assert((split_result[2]==(Eigen::VectorXd(3)<<8,9,10).finished()));
 
     return 0;
 }
