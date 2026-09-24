@@ -60,32 +60,32 @@ RobotDriver::~RobotDriver()
     }
 }
 
-VectorXd RobotDriver::get_joint_velocities()
+Eigen::VectorXd RobotDriver::get_joint_velocities()
 {
     throw std::runtime_error("Not implemented yet.");
 }
 
-void RobotDriver::set_target_joint_velocities(const VectorXd&)
+void RobotDriver::set_target_joint_velocities(const Eigen::VectorXd&)
 {
     throw std::runtime_error("Not implemented yet.");
 }
 
-VectorXd RobotDriver::get_joint_torques()
+Eigen::VectorXd RobotDriver::get_joint_torques()
 {
     throw std::runtime_error("Not implemented yet.");
 }
 
-void RobotDriver::set_target_joint_torques(const VectorXd &)
+void RobotDriver::set_target_joint_torques(const Eigen::VectorXd &)
 {
     throw std::runtime_error("Not implemented yet.");
 }
 
-std::tuple<VectorXd, VectorXd> RobotDriver::get_joint_limits()
+std::tuple<Eigen::VectorXd, Eigen::VectorXd> RobotDriver::get_joint_limits()
 {
     return joint_limits_;
 }
 
-void RobotDriver::set_joint_limits(const std::tuple<VectorXd, VectorXd> &joint_limits)
+void RobotDriver::set_joint_limits(const std::tuple<Eigen::VectorXd, Eigen::VectorXd> &joint_limits)
 {
     joint_limits_ = joint_limits;
 }

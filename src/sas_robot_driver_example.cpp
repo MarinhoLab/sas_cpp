@@ -43,12 +43,12 @@ marinholab::sas::core::RobotDriverExample::RobotDriverExample(const RobotDriverE
     set_joint_limits(configuration.joint_limits);
 }
 
-VectorXd marinholab::sas::core::RobotDriverExample::get_joint_positions()
+Eigen::VectorXd marinholab::sas::core::RobotDriverExample::get_joint_positions()
 {
     return joint_positions_;
 }
 
-void marinholab::sas::core::RobotDriverExample::set_target_joint_positions(const VectorXd &set_target_joint_positions_rad)
+void marinholab::sas::core::RobotDriverExample::set_target_joint_positions(const Eigen::VectorXd &set_target_joint_positions_rad)
 {
     if(joint_positions_.size() != set_target_joint_positions_rad.size())
         throw std::runtime_error("marinholab::sas::core::RobotDriverExample::set_target_joint_positions invalid size for set_target_joint_positions_rad");

@@ -46,7 +46,7 @@ int main(int,char**)
 
     auto configuration = marinholab::sas::core::RobotDriverExampleConfiguration();
     configuration.name = "Example_Robot_123";
-    configuration.initial_joint_positions = VectorXd::Random(7);
+    configuration.initial_joint_positions = Eigen::VectorXd::Random(7);
 
     auto robot_driver_example = marinholab::sas::core::RobotDriverExample(configuration, shutdown_signaler);
 
@@ -55,7 +55,7 @@ int main(int,char**)
 
     std::cout << "Initial joint positions: " << robot_driver_example.get_joint_positions().transpose() << std::endl;
 
-    VectorXd target_joint_positions = VectorXd::Random(7);
+    Eigen::VectorXd target_joint_positions = Eigen::VectorXd::Random(7);
     std::cout << "Target joint positions: " << target_joint_positions.transpose() << std::endl;
 
     robot_driver_example.set_target_joint_positions(target_joint_positions);

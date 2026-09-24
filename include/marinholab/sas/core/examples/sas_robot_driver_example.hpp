@@ -35,7 +35,6 @@
 #include <marinholab/sas/core/sas_robot_driver.hpp>
 #include <Eigen/Dense>
 
-using namespace Eigen;
 
 namespace marinholab::sas::core
 {
@@ -48,8 +47,8 @@ namespace marinholab::sas::core
 struct RobotDriverExampleConfiguration
 {
     std::string name;
-    VectorXd initial_joint_positions;
-    std::tuple<VectorXd,VectorXd> joint_limits;
+    Eigen::VectorXd initial_joint_positions;
+    std::tuple<Eigen::VectorXd,Eigen::VectorXd> joint_limits;
 };
 
 /**
@@ -63,7 +62,7 @@ struct RobotDriverExampleConfiguration
 {
 protected:
     const RobotDriverExampleConfiguration configuration_;
-    VectorXd joint_positions_;
+    Eigen::VectorXd joint_positions_;
 
 public:
     RobotDriverExample(RobotDriverExample&) = delete;
@@ -82,14 +81,14 @@ public:
      * @brief Get the current joint positions
      * @return Vector of joint positions (radians)
      */
-    virtual VectorXd get_joint_positions() override;
+    virtual Eigen::VectorXd get_joint_positions() override;
 
     /**
      * @brief Set target joint positions
      * @param set_target_joint_positions_rad Target joint positions in radians
      * @throws std::runtime_error if the input vector has incorrect size
      */
-    virtual void set_target_joint_positions(const VectorXd& set_target_joint_positions_rad) override;
+    virtual void set_target_joint_positions(const Eigen::VectorXd& set_target_joint_positions_rad) override;
 
     /**
      * @brief Connect the example driver (establish resources)
