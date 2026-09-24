@@ -34,7 +34,6 @@
 
 #include <Eigen/Dense>
 
-using namespace Eigen;
 
 namespace marinholab::sas::core
 {
@@ -73,14 +72,14 @@ constexpr T incremental_mean(const T &current_mean, const int &current_number_of
  * @param b Second vector.
  * @return Concatenated vector containing all elements of a followed by b.
  */
-VectorXd concatenate(const VectorXd& a, const VectorXd& b);
+Eigen::VectorXd concatenate(const Eigen::VectorXd& a, const Eigen::VectorXd& b);
 
 /**
  * @brief Concatenate a list of vectors into a single vector.
  * @param as Vector of vectors to concatenate in order.
  * @return Concatenated vector containing the elements of each input vector in order.
  */
-VectorXd concatenate(const std::vector<VectorXd>& as);
+Eigen::VectorXd concatenate(const std::vector<Eigen::VectorXd>& as);
 
 /**
  * @brief Stack two matrices vertically (A above B).
@@ -89,21 +88,21 @@ VectorXd concatenate(const std::vector<VectorXd>& as);
  * @return Matrix formed by stacking A on top of B. Columns must match.
  * @throws std::range_error if A and B have different numbers of columns.
  */
-MatrixXd vstack(const MatrixXd& A, const MatrixXd& B);
+Eigen::MatrixXd vstack(const Eigen::MatrixXd& A, const Eigen::MatrixXd& B);
 
 /**
  * @brief Create a block-diagonal matrix from a list of matrices.
  * @param As Vector of matrices to place on the block diagonal.
  * @return Block-diagonal matrix containing the input matrices along its diagonal.
  */
-MatrixXd block_diag(const std::vector<MatrixXd>& As);
+Eigen::MatrixXd block_diag(const std::vector<Eigen::MatrixXd>& As);
 
 /**
  * @brief Split a vector into pieces with sizes specified by ns.
  * @param a Vector to split.
  * @param ns Sizes of each piece; their sum must equal a.size().
- * @return Vector containing the split VectorXd pieces.
+ * @return Vector containing the split Eigen::VectorXd pieces.
  */
-std::vector<VectorXd> split(const VectorXd& a, const std::vector<int>& ns);
+std::vector<Eigen::VectorXd> split(const Eigen::VectorXd& a, const std::vector<int>& ns);
 
 }
