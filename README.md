@@ -8,6 +8,33 @@
 > More information about SmartArmStack is available in
 > [smartarmstack.github.io](https://smartarmstack.github.io/).
 
+## Installation
+
+The supported installation is the [SmartArmStack apt repository](https://smartarmstack.github.io/),
+which provides the pre-built `libmarinholab-sas-core` package
+(LGPL, `amd64` and `arm64`):
+
+```bash
+curl -s --compressed "https://smartarmstack.github.io/smart_arm_stack_ROS2/KEY.gpg" \
+| gpg --dearmor \
+| sudo tee /etc/apt/trusted.gpg.d/smartarmstack_lgpl.gpg >/dev/null
+sudo curl -s --compressed -o /etc/apt/sources.list.d/smartarmstack_lgpl.list \
+"https://smartarmstack.github.io/smart_arm_stack_ROS2/smartarmstack_lgpl.list"
+sudo apt update
+sudo apt-get install libmarinholab-sas-core
+```
+
+The package depends on `libdqrobotics` (from the DQ Robotics PPA, see
+[Prerequisites](#prerequisites)) and installs the shared library, the
+headers under `/usr/include/marinholab/sas/core/` and the CMake package
+configuration, so consumers can `find_package(marinholab_sas_core)`.
+Keep it up to date with
+`sudo apt-get update && sudo apt-get upgrade libmarinholab-sas-core`.
+
+Building from source is described in [Building (CMake)](#building-cmake);
+the full list of SmartArmStack packages is on
+[smartarmstack.github.io](https://smartarmstack.github.io/).
+
 ## Contents
 
 - `include/marinholab/sas/core/` — public C++ headers
