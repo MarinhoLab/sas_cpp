@@ -9,6 +9,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(MARINHO_LAB_SAS_CORE_BUILD_EXAMPLES "Build the example executables" ON)
+# A parent project that links the library into its own binary (and provides
+# dqrobotics::dqrobotics from a non-installed target) can turn the install rules
+# and the exported CMake package off.
+option(MARINHO_LAB_SAS_CORE_INSTALL "Install the library, headers and CMake package" ON)
 
 # Shared library by default; build a static library with -DBUILD_SHARED_LIBS=OFF.
 # The option() establishes the default while still honouring a value that a
@@ -94,37 +98,39 @@ if(MARINHO_LAB_SAS_CORE_BUILD_EXAMPLES)
 endif()
 
 # ---- Install ----
-include(GNUInstallDirs)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(TARGETS marinholab_sas_core
-        EXPORT marinholab_sas_core-targets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-
-if(MARINHO_LAB_SAS_CORE_BUILD_EXAMPLES)
-    install(TARGETS sas_core_example sas_clock_example sas_clock_sched_fifo_example
-                    thread_manager_example sas_robot_driver_example
+if(MARINHO_LAB_SAS_CORE_INSTALL)
+    include(GNUInstallDirs)
+    install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    install(TARGETS marinholab_sas_core
+            EXPORT marinholab_sas_core-targets
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-endif()
 
-# ---- CMake package ----
-include(CMakePackageConfigHelpers)
-install(EXPORT marinholab_sas_core-targets
-        FILE marinholab_sas_core-targets.cmake
+    if(MARINHO_LAB_SAS_CORE_BUILD_EXAMPLES)
+        install(TARGETS sas_core_example sas_clock_example sas_clock_sched_fifo_example
+                        thread_manager_example sas_robot_driver_example
+                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    endif()
+
+    # ---- CMake package ----
+    include(CMakePackageConfigHelpers)
+    install(EXPORT marinholab_sas_core-targets
+            FILE marinholab_sas_core-targets.cmake
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/marinholab_sas_core)
+
+    configure_package_config_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/marinholab_sas_core-config.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config.cmake
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/marinholab_sas_core)
+
+    write_basic_package_version_file(
+        ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config-version.cmake
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY SameMajorVersion)
+
+    install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config-version.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/marinholab_sas_core)
-
-configure_package_config_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/marinholab_sas_core-config.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/marinholab_sas_core)
-
-write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config-version.cmake
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion)
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/marinholab_sas_core-config-version.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/marinholab_sas_core)
+endif()
