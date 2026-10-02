@@ -63,6 +63,15 @@ int main(int,char**)
 
     assert((target_joint_positions == robot_driver_example.get_joint_positions()));
 
+    // Tool GPIO: default-initialised to false, and the base implementation stores what is set.
+    if(robot_driver_example.get_tool_gpio() != std::array<bool, 2>{false, false})
+        throw std::runtime_error("sas_robot_driver_example_main::Tool GPIO should default to {false, false}.");
+    robot_driver_example.set_tool_gpio({true, false});
+    if(robot_driver_example.get_tool_gpio() != std::array<bool, 2>{true, false})
+        throw std::runtime_error("sas_robot_driver_example_main::Tool GPIO round-trip failed.");
+    std::cout << "Tool GPIO after change: " << robot_driver_example.get_tool_gpio()[0] << " "
+              << robot_driver_example.get_tool_gpio()[1] << std::endl;
+
     robot_driver_example.deinitialize();
     robot_driver_example.disconnect();
 
