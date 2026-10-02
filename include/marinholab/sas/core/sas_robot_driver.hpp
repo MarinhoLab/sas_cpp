@@ -27,6 +27,8 @@
 #   1. Juan Jose Quiroz Omana (juanjose.quirozomana@manchester.ac.uk)
 #      Added the Watchdog functionaly initially proposed in
 #      https://github.com/SmartArmStack/sas_core/pull/1
+#   2. Erwin Lopez (erwin.lopez@manchester.ac.uk)
+#      Added functionality to control tool gpio
 */
 
 /**
@@ -37,6 +39,7 @@
  * implement to interact with hardware. The header also contains watchdog
  * management used by driver implementations.
  */
+#include <array>
 #include <atomic>
 #include <mutex>
 #include <thread>
@@ -63,6 +66,7 @@ protected:
     std::tuple<Eigen::VectorXd, Eigen::VectorXd> joint_limits_;
     Eigen::VectorXd joint_velocities_;
     Eigen::VectorXd joint_torques_;
+    std::array<bool, 2> tool_gpio_{};
 
     std::unique_ptr<marinholab::sas::core::Clock> clock_;
     std::unique_ptr<std::thread> watchdog_thread_;
@@ -157,6 +161,20 @@ protected:
      * @param joint_limits Tuple of (min_limits, max_limits)
      */
     virtual void set_joint_limits(const std::tuple<Eigen::VectorXd, Eigen::VectorXd>& joint_limits);
+
+    /**
+     * @brief Get the last commanded tool (wrist) digital output values
+     * @note The default implementation returns the value stored by set_tool_gpio(). Drivers may override it.
+     * @return Array of boolean values, one per digital pin
+     */
+    virtual std::array<bool, 2> get_tool_gpio();
+
+    /**
+     * @brief Set the tool (wrist) digital output values
+     * @note The default implementation only stores the value. Drivers override it to command the hardware.
+     * @param tool_gpio Array of boolean values, one per digital pin
+     */
+    virtual void set_tool_gpio(const std::array<bool, 2>& tool_gpio);
 
     /**
      * @brief Start the watchdog thread with the given period

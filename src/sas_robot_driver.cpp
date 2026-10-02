@@ -25,6 +25,8 @@
 #   1. Juan Jose Quiroz Omana (juanjose.quirozomana@manchester.ac.uk)
 #      Added the Watchdog functionality initially proposed in
 #      https://github.com/SmartArmStack/sas_core/pull/1
+#   2. Erwin Lopez (erwin.lopez@manchester.ac.uk)
+#      Added functionality to control tool gpio
 #*/
 
 /**
@@ -88,6 +90,16 @@ std::tuple<Eigen::VectorXd, Eigen::VectorXd> RobotDriver::get_joint_limits()
 void RobotDriver::set_joint_limits(const std::tuple<Eigen::VectorXd, Eigen::VectorXd> &joint_limits)
 {
     joint_limits_ = joint_limits;
+}
+
+std::array<bool, 2> RobotDriver::get_tool_gpio()
+{
+    return tool_gpio_;
+}
+
+void RobotDriver::set_tool_gpio(const std::array<bool, 2>& tool_gpio)
+{
+    tool_gpio_ = tool_gpio;
 }
 
 
