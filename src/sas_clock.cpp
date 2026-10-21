@@ -146,6 +146,14 @@ void Clock::safe_sleep_seconds(const double& seconds, std::atomic_bool* break_lo
     }
 }
 
+void Clock::safe_sleep_seconds(const double& seconds, ShutdownSignaler* shutdown_signaler)
+{
+    for(int i=0;i<int(seconds/get_desired_thread_sampling_time_sec()) && !shutdown_signaler->should_shutdown();i++)
+    {
+        update_and_sleep();
+    }
+}
+
 void Clock::blocking_sleep_seconds(const double& seconds)
 {
     for(int i=0;i<int(seconds/get_desired_thread_sampling_time_sec());i++)
