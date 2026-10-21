@@ -35,6 +35,7 @@
 #include <atomic>
 #include <chrono>
 #include <map>
+#include <memory>
 
 #include <marinholab/sas/core/sas_object.hpp>
 #include <marinholab/sas/core/sas_core.hpp>
@@ -125,9 +126,9 @@ public:
     /**
      * @brief Sleep for the specified duration while allowing early exit via a ShutdownSignaler
      * @param seconds Sleep duration in seconds
-     * @param shutdown_signaler Pointer to a ShutdownSignaler. The sleep is interrupted once should_shutdown() returns true
+     * @param shutdown_signaler Shared pointer to a ShutdownSignaler. The sleep is interrupted once should_shutdown() returns true
      */
-    void safe_sleep_seconds(const double& seconds, ShutdownSignaler* shutdown_signaler);
+    void safe_sleep_seconds(const double& seconds, const std::shared_ptr<ShutdownSignaler>& shutdown_signaler);
 
     /**
      * @brief Block the calling thread for the specified duration (no early exit)
