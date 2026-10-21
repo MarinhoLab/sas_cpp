@@ -146,7 +146,7 @@ void Clock::safe_sleep_seconds(const double& seconds, std::atomic_bool* break_lo
     }
 }
 
-void Clock::safe_sleep_seconds(const double& seconds, ShutdownSignaler* shutdown_signaler)
+void Clock::safe_sleep_seconds(const double& seconds, const std::shared_ptr<ShutdownSignaler>& shutdown_signaler)
 {
     for(int i=0;i<int(seconds/get_desired_thread_sampling_time_sec()) && !shutdown_signaler->should_shutdown();i++)
     {
