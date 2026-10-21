@@ -38,6 +38,7 @@
 
 #include <marinholab/sas/core/sas_object.hpp>
 #include <marinholab/sas/core/sas_core.hpp>
+#include <marinholab/sas/core/sas_shutdown_signaler.hpp>
 
 namespace marinholab::sas::core
 {
@@ -120,6 +121,13 @@ public:
      * @param break_loop Pointer to an atomic boolean that will interrupt the sleep if set
      */
     void safe_sleep_seconds(const double& seconds, std::atomic_bool* break_loop);
+
+    /**
+     * @brief Sleep for the specified duration while allowing early exit via a ShutdownSignaler
+     * @param seconds Sleep duration in seconds
+     * @param shutdown_signaler Pointer to a ShutdownSignaler. The sleep is interrupted once should_shutdown() returns true
+     */
+    void safe_sleep_seconds(const double& seconds, ShutdownSignaler* shutdown_signaler);
 
     /**
      * @brief Block the calling thread for the specified duration (no early exit)
