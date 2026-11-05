@@ -29,27 +29,27 @@
  * @brief Implements ShutdownSignaler for coordinated shutdown requests.
  */
 
-#include<marinholab/sas/core/sas_shutdown_signaler.hpp>
+#include <marinholab/sas/core/sas_shutdown_signaler.hpp>
 
 namespace marinholab::sas::core
 {
 
-    bool ShutdownSignaler::should_shutdown()
+bool ShutdownSignaler::should_shutdown()
+{
+    if (external_shutdown_signal_ != nullptr)
     {
-        if(external_shutdown_signal_ != nullptr)
-        {
-            return *external_shutdown_signal_;
-        }
-        else
-            return internal_shutdown_signal_;
+        return *external_shutdown_signal_;
     }
-    void ShutdownSignaler::shutdown()
-    {
-        if(external_shutdown_signal_ != nullptr)
-        {
-            *external_shutdown_signal_ = true;
-        }
-        else
-            internal_shutdown_signal_ = true;
-    }
+    else
+        return internal_shutdown_signal_;
 }
+void ShutdownSignaler::shutdown()
+{
+    if (external_shutdown_signal_ != nullptr)
+    {
+        *external_shutdown_signal_ = true;
+    }
+    else
+        internal_shutdown_signal_ = true;
+}
+}  // namespace marinholab::sas::core

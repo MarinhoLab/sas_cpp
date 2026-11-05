@@ -40,7 +40,7 @@ namespace marinholab::sas::core
  */
 Eigen::VectorXd concatenate(const Eigen::VectorXd& a, const Eigen::VectorXd& b)
 {
-    return (Eigen::VectorXd (a.size() + b.size()) << a, b).finished();
+    return (Eigen::VectorXd(a.size() + b.size()) << a, b).finished();
 }
 
 /**
@@ -51,7 +51,7 @@ Eigen::VectorXd concatenate(const Eigen::VectorXd& a, const Eigen::VectorXd& b)
 Eigen::VectorXd concatenate(const std::vector<Eigen::VectorXd>& as)
 {
     Eigen::VectorXd b;
-    for(const auto& c : as)
+    for (const auto& c : as)
     {
         b = concatenate(b, c);
     }
@@ -71,16 +71,16 @@ Eigen::VectorXd concatenate(const std::vector<Eigen::VectorXd>& as)
  */
 Eigen::MatrixXd vstack(const Eigen::MatrixXd& A, const Eigen::MatrixXd& B)
 {
-    if((A.size() == 0) && (B.size()==0))
+    if ((A.size() == 0) && (B.size() == 0))
         return Eigen::MatrixXd();
-    if(A.size() == 0)
+    if (A.size() == 0)
         return B;
-    if(B.size() == 0)
+    if (B.size() == 0)
         return A;
-    if(A.cols()!=B.cols())
+    if (A.cols() != B.cols())
         throw std::range_error("vstack needs inputs a and b with the same number of columns.");
 
-    return(Eigen::MatrixXd(A.rows()+B.rows(),A.cols()) << A, B).finished();
+    return (Eigen::MatrixXd(A.rows() + B.rows(), A.cols()) << A, B).finished();
 }
 
 /**
@@ -100,24 +100,24 @@ Eigen::MatrixXd block_diag(const std::vector<Eigen::MatrixXd>& As)
 {
     int rows = 0;
     int cols = 0;
-    for(const auto& A : As)
+    for (const auto& A : As)
     {
-        rows+=A.rows();
-        cols+=A.cols();
+        rows += A.rows();
+        cols += A.cols();
     }
 
-    Eigen::MatrixXd B = Eigen::MatrixXd::Zero(rows,cols);
+    Eigen::MatrixXd B = Eigen::MatrixXd::Zero(rows, cols);
     int start_row = 0;
     int start_col = 0;
-    for(const auto& A : As)
+    for (const auto& A : As)
     {
         const int& this_rows = A.rows();
         const int& this_columns = A.cols();
 
-        B.block(start_row,start_col,this_rows,this_columns) = A;
+        B.block(start_row, start_col, this_rows, this_columns) = A;
 
-        start_row+=this_rows;
-        start_col+=this_columns;
+        start_row += this_rows;
+        start_col += this_columns;
     }
 
     return B;
@@ -134,14 +134,12 @@ std::vector<Eigen::VectorXd> split(const Eigen::VectorXd& a, const std::vector<i
 {
     std::vector<Eigen::VectorXd> as;
     int n_acc = 0;
-    for(const auto& n : ns)
+    for (const auto& n : ns)
     {
-        as.push_back(a.segment(n_acc,n));
-        n_acc+=n;
+        as.push_back(a.segment(n_acc, n));
+        n_acc += n;
     }
     return as;
 }
 
-
-
-}
+}  // namespace marinholab::sas::core

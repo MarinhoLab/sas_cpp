@@ -46,7 +46,6 @@
 #include <marinholab/sas/core/sas_clock.hpp>
 #include <Eigen/Dense>
 
-
 namespace marinholab::sas::core
 {
 /**
@@ -58,7 +57,7 @@ namespace marinholab::sas::core
 class RobotDriver
 {
 protected:
-    std::atomic_bool* break_loops_; //Deprecated
+    std::atomic_bool* break_loops_;  //Deprecated
     std::shared_ptr<ShutdownSignaler> shutdown_signaler_;
     std::tuple<Eigen::VectorXd, Eigen::VectorXd> joint_limits_;
     Eigen::VectorXd joint_velocities_;
@@ -78,21 +77,21 @@ protected:
     [[deprecated("Use RobotDriver(const std::shared_ptr<ShutdownSignaler>& shutdown_signaler_) instead.")]]
     RobotDriver(std::atomic_bool* break_loops);
 
-    RobotDriver()=delete;
-    RobotDriver(const RobotDriver&)=delete;
+    RobotDriver() = delete;
+    RobotDriver(const RobotDriver&) = delete;
 
     std::exception_ptr watchdog_exception_{nullptr};
     std::mutex watchdog_exception_mutex_;
 
-
     std::function<void()> control_loop_callback_;
 
-    public:
+public:
     /**
      * @brief Enumeration of optional driver functionalities
      */
-    enum class Functionality{
-        None=0,
+    enum class Functionality
+    {
+        None = 0,
         PositionControl,
         VelocityControl,
         ForceControl,
@@ -170,9 +169,10 @@ protected:
      * @param time_point_from_the_server Time point provided by the server
      * @param status Current watchdog status flag
      */
-    void watchdog_trigger(const std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>& time_point_from_the_client,
-                          const std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>& time_point_from_the_server,
-                          const bool& status);
+    void watchdog_trigger(
+        const std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>& time_point_from_the_client,
+        const std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>& time_point_from_the_server,
+        const bool& status);
 
     /**
      * @brief Set the maximum acceptable delay for the watchdog (seconds)
@@ -190,23 +190,22 @@ protected:
     /**
      * @brief Connect to the underlying robot/hardware
      */
-    virtual void connect()=0;
+    virtual void connect() = 0;
 
     /**
      * @brief Disconnect from the underlying robot/hardware
      */
-    virtual void disconnect()=0;
+    virtual void disconnect() = 0;
 
     /**
      * @brief Initialize the driver resources
      */
-    virtual void initialize()=0;
+    virtual void initialize() = 0;
 
     /**
      * @brief Deinitialize the driver resources
      */
-    virtual void deinitialize()=0;
-
+    virtual void deinitialize() = 0;
 
     /**
      * @brief Set the control loop callback function
@@ -214,7 +213,6 @@ protected:
      *
      */
     void set_control_loop_callback(std::function<void()> callback);
-
 
     /**
      * @brief Execute the control loop callback if it has been set
@@ -225,14 +223,10 @@ protected:
      */
     void execute_control_loop_callback();
 
-
     /**
      * @brief Check if a control loop callback has been set
      * @return true if a callback has been set, false otherwise
      */
     bool control_loop_callback_is_set();
 };
-}
-
-
-
+}  // namespace marinholab::sas::core

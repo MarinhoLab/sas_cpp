@@ -31,45 +31,45 @@
  * parts of the system. Useful to unify shutdown behavior in both ROS and
  * non-ROS contexts.
  */
-#include<atomic>
+#include <atomic>
 
 namespace marinholab::sas::core
 {
-    /**
+/**
      * @brief Shutdown coordinator.
      *
      * ShutdownSignaler provides a thread-safe mechanism to unify shutdown
      * requests.
      */
-    class ShutdownSignaler
-    {
-        private:
-            std::atomic_bool* external_shutdown_signal_{nullptr};
-            bool internal_shutdown_signal_{false};
-        public:
-            /**
+class ShutdownSignaler
+{
+private:
+    std::atomic_bool* external_shutdown_signal_{nullptr};
+    bool internal_shutdown_signal_{false};
+
+public:
+    /**
              * @brief Default constructor
              */
-            ShutdownSignaler() = default;
-            /**
+    ShutdownSignaler() = default;
+    /**
              * @brief Construct a ShutdownSignaler using an external atomic flag
              * @param external_shutdown_signal Pointer to an external atomic_bool used for shutdown signaling
              */
-            ShutdownSignaler(std::atomic_bool* external_shutdown_signal):
-            external_shutdown_signal_(external_shutdown_signal)
-            {
+    ShutdownSignaler(std::atomic_bool* external_shutdown_signal)
+        : external_shutdown_signal_(external_shutdown_signal) {
 
-            };
+          };
 
-            /**
+    /**
              * @brief Check whether a shutdown has been requested
              * @return true if shutdown requested (external or internal), false otherwise
              */
-            bool should_shutdown();
+    bool should_shutdown();
 
-            /**
+    /**
              * @brief Trigger a shutdown signal
              */
-            void shutdown();
-    };
-}
+    void shutdown();
+};
+}  // namespace marinholab::sas::core

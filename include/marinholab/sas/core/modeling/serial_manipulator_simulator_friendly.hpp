@@ -42,8 +42,8 @@ namespace marinholab::sas::core::modeling
 // signatures, e.g. Eigen::MatrixXd/Eigen::VectorXd, are injected into the global namespace
 // by the dqrobotics headers.)
 using DQ_robotics::DQ;
-using DQ_robotics::DQ_SerialManipulator;
 using DQ_robotics::DQ_JointType;
+using DQ_robotics::DQ_SerialManipulator;
 
 /**
  * @brief A serial manipulator whose joints carry explicit pre/post offsets.
@@ -54,18 +54,20 @@ using DQ_robotics::DQ_JointType;
  * @ref DQ_SerialManipulator would not. Supports both revolute (R) and
  * prismatic (T) joints about any principal axis.
  */
-class SerialManipulatorSimulatorFriendly: public DQ_SerialManipulator
+class SerialManipulatorSimulatorFriendly : public DQ_SerialManipulator
 {
 public:
     /** @brief The actuation type and axis of a single joint. */
-    enum class ActuationType{
-        RZ, ///< Revolution about the z-axis.
-        RY, ///< Revolution about the y-axis.
-        RX, ///< Revolution about the x-axis.
-        TZ, ///< Translation along the z-axis.
-        TY, ///< Translation along the y-axis.
-        TX  ///< Translation along the x-axis.
+    enum class ActuationType
+    {
+        RZ,  ///< Revolution about the z-axis.
+        RY,  ///< Revolution about the y-axis.
+        RX,  ///< Revolution about the x-axis.
+        TZ,  ///< Translation along the z-axis.
+        TY,  ///< Translation along the y-axis.
+        TX   ///< Translation along the x-axis.
     };
+
 protected:
     std::vector<DQ> offset_before_;
     std::vector<DQ> offset_after_;
@@ -73,10 +75,9 @@ protected:
 
     DQ _get_w(const int& ith) const;
     DQ _joint_transformation(const double& q, const int& ith) const;
+
 public:
-
-
-    SerialManipulatorSimulatorFriendly()=delete;
+    SerialManipulatorSimulatorFriendly() = delete;
     /**
      * @brief Construct the manipulator.
      *
@@ -86,13 +87,12 @@ public:
      *
      * @throws std::runtime_error if the three vectors do not have equal size.
      */
-    SerialManipulatorSimulatorFriendly(const std::vector<DQ>& offset_before,
-                                       const std::vector<DQ>& offset_after,
+    SerialManipulatorSimulatorFriendly(const std::vector<DQ>& offset_before, const std::vector<DQ>& offset_after,
                                        const std::vector<ActuationType>& actuation_types);
 
+    using DQ_SerialManipulator::raw_fkm;
     using DQ_SerialManipulator::raw_pose_jacobian;
     using DQ_SerialManipulator::raw_pose_jacobian_derivative;
-    using DQ_SerialManipulator::raw_fkm;
 
     /**
      * @brief Joint types this model can represent.
@@ -114,14 +114,15 @@ public:
      * @param to_ith_link   Index of the terminal link.
      * @return An 8 x (to_ith_link+1) Jacobian-derivative matrix.
      */
-    Eigen::MatrixXd raw_pose_jacobian_derivative(const Eigen::VectorXd& q, const Eigen::VectorXd& q_dot, const int& to_ith_link) const override;
+    Eigen::MatrixXd raw_pose_jacobian_derivative(const Eigen::VectorXd& q, const Eigen::VectorXd& q_dot,
+                                                 const int& to_ith_link) const override;
     /**
      * @brief Raw forward kinematics of the chain up to a given link.
      * @param q_vec         Joint configuration vector.
      * @param to_ith_link   Index of the terminal link.
      * @return The dual-quaternion pose of the terminal link.
      */
-    DQ raw_fkm(const Eigen::VectorXd &q_vec, const int &to_ith_link) const override;
+    DQ raw_fkm(const Eigen::VectorXd& q_vec, const int& to_ith_link) const override;
 };
 
-}
+}  // namespace marinholab::sas::core::modeling

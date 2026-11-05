@@ -34,7 +34,6 @@
 
 #include <Eigen/Dense>
 
-
 namespace marinholab::sas::core
 {
 
@@ -45,11 +44,12 @@ namespace marinholab::sas::core
  * compute (for example, Clock statistics). Add new entries here as new
  * statistics are supported.
  */
-enum class Statistics{
+enum class Statistics
+{
     Mean
 };
 
-template<class T>
+template <class T>
 /**
  * @brief incremental_mean a simple implementation of incremental mean, for the many cases in which
  * keeping a vector of all values would be impractical.
@@ -59,11 +59,11 @@ template<class T>
  * @throws std::range_error if current_number_of_samples is negative.
  * @return the incremental mean, considering the new_sample.
  */
-constexpr T incremental_mean(const T &current_mean, const int &current_number_of_samples, const T &new_sample)
+constexpr T incremental_mean(const T& current_mean, const int& current_number_of_samples, const T& new_sample)
 {
-    if(current_number_of_samples<0)
+    if (current_number_of_samples < 0)
         throw std::range_error("incremental_mean::current_number_of_samples should be larger than 0");
-    return (current_mean * current_number_of_samples + new_sample)/(current_number_of_samples+1);
+    return (current_mean * current_number_of_samples + new_sample) / (current_number_of_samples + 1);
 }
 
 /**
@@ -105,4 +105,4 @@ Eigen::MatrixXd block_diag(const std::vector<Eigen::MatrixXd>& As);
  */
 std::vector<Eigen::VectorXd> split(const Eigen::VectorXd& a, const std::vector<int>& ns);
 
-}
+}  // namespace marinholab::sas::core

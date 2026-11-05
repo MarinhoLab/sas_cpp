@@ -31,9 +31,9 @@
  * std::vector and DQ (dual quaternion) representations used across the
  * project.
  */
-#include<vector>
-#include<Eigen/Dense>
-#include<dqrobotics/DQ.h>
+#include <vector>
+#include <Eigen/Dense>
+#include <dqrobotics/DQ.h>
 
 using namespace DQ_robotics;
 
@@ -51,27 +51,26 @@ std::vector<double> vectorxd_to_std_vector_double(const Eigen::VectorXd& vectorx
  * @param vectorxi Source Eigen integer vector.
  * @return std::vector<int> containing the same elements in order.
  */
-std::vector<int>    vectorxi_to_std_vector_int(const Eigen::VectorXi& vectorxi);
+std::vector<int> vectorxi_to_std_vector_int(const Eigen::VectorXi& vectorxi);
 
 /**
  * @brief Convert a std::vector<double> to an Eigen::VectorXd.
  * @param std_vector_double Source std::vector<double>.
  * @return Eigen::VectorXd containing the same elements.
  */
-Eigen::VectorXd            std_vector_double_to_vectorxd(std::vector<double> std_vector_double);
+Eigen::VectorXd std_vector_double_to_vectorxd(std::vector<double> std_vector_double);
 
 /**
  * @brief Convert a std::vector<int> to an Eigen::VectorXi.
  * @param std_vector_int Source std::vector<int>.
  * @return Eigen::VectorXi containing the same elements.
  */
-Eigen::VectorXi            std_vector_int_to_vectorxi(std::vector<int> std_vector_int);
+Eigen::VectorXi std_vector_int_to_vectorxi(std::vector<int> std_vector_int);
 
 /**
  * @brief Convert a std::vector<double> to a DQ (dual quaternion) object.
  * @param std_vector_double Source std::vector<double> containing the DQ coefficients.
  * @return DQ constructed from the provided coefficients.
  */
-DQ                  std_vector_double_to_dq(const std::vector<double>& std_vector_double);
-}
-
+DQ std_vector_double_to_dq(const std::vector<double>& std_vector_double);
+}  // namespace marinholab::sas::core

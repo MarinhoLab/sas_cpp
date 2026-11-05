@@ -42,6 +42,7 @@ protected:
     const std::string class_name_;
     void _print_license_header(const std::string& class_name);
     Object(const std::string& class_name);
+
 public:
     Object() = delete;
     /**
@@ -50,4 +51,4 @@ public:
      */
     std::string get_class_name() const;
 };
-}
+}  // namespace marinholab::sas::core

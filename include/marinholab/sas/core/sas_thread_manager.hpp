@@ -77,15 +77,15 @@ public:
      *
      * @see apply_priority() for the concrete Linux policy/value mapping.
      */
-    enum class PRIORITY {
-        LOWEST     = 0,  ///< SCHED_OTHER, nice 19 (least favorable, lowest priority)
-        BACKGROUND = 10, ///< SCHED_OTHER, nice 10
-        NORMAL     = 50, ///< SCHED_OTHER, nice 0 (default OS priority)
-        HIGH       = 80, ///< SCHED_RR, sched_priority 80 (requires root/CAP_SYS_NICE)
-        REALTIME   = 90, ///< SCHED_FIFO, sched_priority 90 (requires root/CAP_SYS_NICE)
-        CRITICAL   = 99  ///< SCHED_FIFO, sched_priority 99 — the OS-defined maximum
+    enum class PRIORITY
+    {
+        LOWEST = 0,       ///< SCHED_OTHER, nice 19 (least favorable, lowest priority)
+        BACKGROUND = 10,  ///< SCHED_OTHER, nice 10
+        NORMAL = 50,      ///< SCHED_OTHER, nice 0 (default OS priority)
+        HIGH = 80,        ///< SCHED_RR, sched_priority 80 (requires root/CAP_SYS_NICE)
+        REALTIME = 90,    ///< SCHED_FIFO, sched_priority 90 (requires root/CAP_SYS_NICE)
+        CRITICAL = 99     ///< SCHED_FIFO, sched_priority 99 — the OS-defined maximum
     };
-
 
 private:
     // Thread optimization parameters
@@ -94,7 +94,6 @@ private:
     void apply_priority();
     void apply_cpu_affinity();
     mutable std::mutex mutex_;
-
 
 protected:
     marinholab::sas::core::Clock clock_;
@@ -106,20 +105,17 @@ protected:
 
 protected:
     void run();
+
 public:
     ~ThreadManager();
 
-    ThreadManager(const ThreadManager&) = delete;            // Copy constructor
-    ThreadManager& operator=(const ThreadManager&) = delete; // Copy assignment
-    ThreadManager(ThreadManager&&) = delete;                 // Move constructor
-    ThreadManager& operator=(ThreadManager&&) = delete;      // Move assignment
+    ThreadManager(const ThreadManager&) = delete;             // Copy constructor
+    ThreadManager& operator=(const ThreadManager&) = delete;  // Copy assignment
+    ThreadManager(ThreadManager&&) = delete;                  // Move constructor
+    ThreadManager& operator=(ThreadManager&&) = delete;       // Move assignment
 
-    ThreadManager(const std::string& thread_name,
-                   const double& period,
-                   std::function<void()> callback,
-                   PRIORITY priority = PRIORITY::NORMAL,
-                   int cpu_core = -1);
-
+    ThreadManager(const std::string& thread_name, const double& period, std::function<void()> callback,
+                  PRIORITY priority = PRIORITY::NORMAL, int cpu_core = -1);
 
     const marinholab::sas::core::Clock& get_clock() const;
 
@@ -128,7 +124,6 @@ public:
     void stop();
     bool is_running() const;
 
-
     // Getters
     std::string get_thread_name() const;
     PRIORITY get_priority() const;
@@ -136,5 +131,4 @@ public:
     double get_period() const;
 };
 
-}
-
+}  // namespace marinholab::sas::core

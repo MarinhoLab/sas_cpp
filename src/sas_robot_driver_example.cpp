@@ -29,16 +29,16 @@
 #include <marinholab/sas/core/examples/sas_robot_driver_example.hpp>
 #include <iostream>
 
-marinholab::sas::core::RobotDriverExample::RobotDriverExample(const RobotDriverExampleConfiguration &configuration, std::atomic_bool *break_loops):
-    RobotDriver(break_loops),
-    configuration_(configuration)
+marinholab::sas::core::RobotDriverExample::RobotDriverExample(const RobotDriverExampleConfiguration& configuration,
+                                                              std::atomic_bool* break_loops)
+    : RobotDriver(break_loops), configuration_(configuration)
 {
     set_joint_limits(configuration.joint_limits);
 }
 
-marinholab::sas::core::RobotDriverExample::RobotDriverExample(const RobotDriverExampleConfiguration& configuration, const std::shared_ptr<ShutdownSignaler>& shutdown_signaler_):
-    RobotDriver(shutdown_signaler_),
-    configuration_(configuration)
+marinholab::sas::core::RobotDriverExample::RobotDriverExample(
+    const RobotDriverExampleConfiguration& configuration, const std::shared_ptr<ShutdownSignaler>& shutdown_signaler_)
+    : RobotDriver(shutdown_signaler_), configuration_(configuration)
 {
     set_joint_limits(configuration.joint_limits);
 }
@@ -48,10 +48,13 @@ Eigen::VectorXd marinholab::sas::core::RobotDriverExample::get_joint_positions()
     return joint_positions_;
 }
 
-void marinholab::sas::core::RobotDriverExample::set_target_joint_positions(const Eigen::VectorXd &set_target_joint_positions_rad)
+void marinholab::sas::core::RobotDriverExample::set_target_joint_positions(
+    const Eigen::VectorXd& set_target_joint_positions_rad)
 {
-    if(joint_positions_.size() != set_target_joint_positions_rad.size())
-        throw std::runtime_error("marinholab::sas::core::RobotDriverExample::set_target_joint_positions invalid size for set_target_joint_positions_rad");
+    if (joint_positions_.size() != set_target_joint_positions_rad.size())
+        throw std::runtime_error(
+            "marinholab::sas::core::RobotDriverExample::set_target_joint_positions invalid size for "
+            "set_target_joint_positions_rad");
     joint_positions_ = set_target_joint_positions_rad;
 }
 

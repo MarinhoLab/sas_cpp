@@ -44,18 +44,16 @@ void Object::_print_license_header(const std::string& class_name)
     // Using colors: https://stackoverflow.com/questions/2616906/how-do-i-output-coloured-text-to-a-linux-terminal
     std::string blue_text("\033[1;34m");
     std::string default_color("\033[0m");
-    
-    
-    std::cout << blue_text << std::string(class_name.size(),'*') 
-        << "****************************************************************" << default_color << std::endl;
-    std::cout << blue_text << class_name 
-        + " (c) Murilo M. Marinho (murilomarinho.info) 2016-2026 LGPLv3" << default_color << std::endl;
-    std::cout << blue_text << std::string(class_name.size(),'*') 
-        << "****************************************************************" << default_color << std::endl;
+
+    std::cout << blue_text << std::string(class_name.size(), '*')
+              << "****************************************************************" << default_color << std::endl;
+    std::cout << blue_text << class_name + " (c) Murilo M. Marinho (murilomarinho.info) 2016-2026 LGPLv3"
+              << default_color << std::endl;
+    std::cout << blue_text << std::string(class_name.size(), '*')
+              << "****************************************************************" << default_color << std::endl;
 }
 
-Object::Object(const std::string &class_name):
-    class_name_(class_name)
+Object::Object(const std::string& class_name) : class_name_(class_name)
 {
     _print_license_header(class_name);
 }
@@ -65,5 +63,4 @@ std::string marinholab::sas::core::Object::get_class_name() const
     return class_name_;
 }
 
-
-}
+}  // namespace marinholab::sas::core

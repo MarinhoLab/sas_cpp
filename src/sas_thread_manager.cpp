@@ -100,18 +100,16 @@ namespace marinholab::sas::core
  * );
  * @endcode
  */
-ThreadManager::ThreadManager(const std::string& thread_name,
-                               const double& period,
-                               std::function<void()> callback,
-                               PRIORITY priority,
-                               int cpu_core)
-    :priority_{priority},
-    cpu_core_{cpu_core},
-    clock_{period},
-    loop_callback_{std::move(callback)},
-    thread_name_{thread_name}
+ThreadManager::ThreadManager(const std::string& thread_name, const double& period, std::function<void()> callback,
+                             PRIORITY priority, int cpu_core)
+    : priority_{priority},
+      cpu_core_{cpu_core},
+      clock_{period},
+      loop_callback_{std::move(callback)},
+      thread_name_{thread_name}
 {
-    if (period <= 0.0) {
+    if (period <= 0.0)
+    {
         throw std::invalid_argument("ThreadManager: period must be positive");
     }
 }
@@ -152,7 +150,6 @@ ThreadManager::~ThreadManager()
     stop();
 }
 
-
 /**
  * @brief Start the thread execution
  */
@@ -183,18 +180,19 @@ void ThreadManager::stop()
         //Just to emphasize that it is an atomic variable.
         stop_requested_.store(true);
 
-        if (thread_.joinable()) {
-            if (std::this_thread::get_id() == thread_.get_id()) {
+        if (thread_.joinable())
+        {
+            if (std::this_thread::get_id() == thread_.get_id())
+            {
                 std::cerr << "Fatal: ThreadManager::stop() called from its own "
-                             "callback thread ('" << thread_name_
-                          << "'); this would deadlock." << std::endl;
+                             "callback thread ('"
+                          << thread_name_ << "'); this would deadlock." << std::endl;
             }
             thread_.join();
         }
         running_.store(false);
     }
 }
-
 
 /**
  * @brief Check if the thread is currently running
@@ -206,7 +204,6 @@ bool ThreadManager::is_running() const
     return running_.load();
 }
 
-
 /**
  * @brief Get the thread name
  * @return Thread name string
@@ -215,7 +212,6 @@ std::string ThreadManager::get_thread_name() const
 {
     return thread_name_;
 }
-
 
 /**
  * @brief Main thread entry function
@@ -226,22 +222,24 @@ void ThreadManager::run()
     apply_priority();
     apply_cpu_affinity();
 
-
     // Set thread name (if supported by platform)
 #ifdef __linux__
     // pthread_setname_np has a 16 character limit (including null terminator)
     // see https://man7.org/linux/man-pages/man3/pthread_setname_np.3.html
     std::string truncated_name = thread_name_;
-    if (truncated_name.length() > 15) {
+    if (truncated_name.length() > 15)
+    {
         truncated_name.resize(15);
     }
     pthread_setname_np(pthread_self(), truncated_name.c_str());
 #endif
 
     // Main loop
-    while (!stop_requested_.load()) {
+    while (!stop_requested_.load())
+    {
         // Execute callback
-        if (loop_callback_) {
+        if (loop_callback_)
+        {
             loop_callback_();
         }
         clock_.update_and_sleep();
@@ -300,7 +298,8 @@ void ThreadManager::run()
  * control.start();  // Priority and affinity are applied in run()
  * @endcode
  */
-void ThreadManager::apply_priority() {
+void ThreadManager::apply_priority()
+{
 #ifdef __linux__
     pthread_t thread_handle = pthread_self();
 
@@ -310,60 +309,63 @@ void ThreadManager::apply_priority() {
     bool use_nice = false;
 
     // Map to Linux scheduling
-    switch (priority_) {
-    case PRIORITY::LOWEST:
-        policy = SCHED_OTHER;
-        param.sched_priority = 0;
-        nice_value = 19;
-        use_nice = true;
-        break;
-    case PRIORITY::BACKGROUND:
-        policy = SCHED_OTHER;
-        param.sched_priority = 0;
-        nice_value = 10;
-        use_nice = true;
-        break;
-    case PRIORITY::NORMAL:
-        policy = SCHED_OTHER;
-        param.sched_priority = 0;
-        nice_value = 0;
-        use_nice = true;
-        break;
-    case PRIORITY::HIGH:
-        policy = SCHED_RR;
-        param.sched_priority = 80;
-        break;
-    case PRIORITY::REALTIME:
-        policy = SCHED_FIFO;
-        param.sched_priority = 90;
-        break;
-    case PRIORITY::CRITICAL:
-        policy = SCHED_FIFO;
-        param.sched_priority = 99;
-        break;
+    switch (priority_)
+    {
+        case PRIORITY::LOWEST:
+            policy = SCHED_OTHER;
+            param.sched_priority = 0;
+            nice_value = 19;
+            use_nice = true;
+            break;
+        case PRIORITY::BACKGROUND:
+            policy = SCHED_OTHER;
+            param.sched_priority = 0;
+            nice_value = 10;
+            use_nice = true;
+            break;
+        case PRIORITY::NORMAL:
+            policy = SCHED_OTHER;
+            param.sched_priority = 0;
+            nice_value = 0;
+            use_nice = true;
+            break;
+        case PRIORITY::HIGH:
+            policy = SCHED_RR;
+            param.sched_priority = 80;
+            break;
+        case PRIORITY::REALTIME:
+            policy = SCHED_FIFO;
+            param.sched_priority = 90;
+            break;
+        case PRIORITY::CRITICAL:
+            policy = SCHED_FIFO;
+            param.sched_priority = 99;
+            break;
     }
 
     // pthread_setschedparam() returns the error number directly on failure —
     // it does NOT set errno. strerror() is called on the return value itself.
     // Note: C++17 If-Initializer Syntax
-    if (int rc = pthread_setschedparam(thread_handle, policy, &param); rc != 0) {
-        std::cerr << "Warning: Failed to set scheduling policy/priority for thread '"
-                  << thread_name_ << "': " << std::strerror(rc) << std::endl;
+    if (int rc = pthread_setschedparam(thread_handle, policy, &param); rc != 0)
+    {
+        std::cerr << "Warning: Failed to set scheduling policy/priority for thread '" << thread_name_
+                  << "': " << std::strerror(rc) << std::endl;
     }
 
     // setpriority(), unlike pthread_setschedparam(), does follow the errno
     // convention: it returns -1 and sets errno on failure.
     // https://man7.org/linux/man-pages/man3/errno.3.html
-    if (use_nice) {
+    if (use_nice)
+    {
         errno = 0;
-        if (setpriority(PRIO_PROCESS, 0, nice_value) != 0) {
-            std::cerr << "Warning: Failed to set nice value for thread '"
-                      << thread_name_ << "': " << std::strerror(errno) << std::endl;
+        if (setpriority(PRIO_PROCESS, 0, nice_value) != 0)
+        {
+            std::cerr << "Warning: Failed to set nice value for thread '" << thread_name_
+                      << "': " << std::strerror(errno) << std::endl;
         }
     }
 #endif
 }
-
 
 /**
  * @brief Apply CPU core affinity to the thread.
@@ -402,22 +404,24 @@ void ThreadManager::apply_priority() {
  * control.start();
  * @endcode
  */
-void ThreadManager::apply_cpu_affinity() {
+void ThreadManager::apply_cpu_affinity()
+{
 #ifdef __linux__
-    if (cpu_core_ < 0) return;
+    if (cpu_core_ < 0)
+        return;
 
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     CPU_SET(cpu_core_, &cpuset);
 
     pthread_t thread_handle = thread_.native_handle();
-    if (pthread_setaffinity_np(thread_handle, sizeof(cpu_set_t), &cpuset) != 0) {
-        std::cerr << "Warning: Failed to set CPU affinity for thread '"
-                  << thread_name_ << "' to core " << cpu_core_ << std::endl;
+    if (pthread_setaffinity_np(thread_handle, sizeof(cpu_set_t), &cpuset) != 0)
+    {
+        std::cerr << "Warning: Failed to set CPU affinity for thread '" << thread_name_ << "' to core " << cpu_core_
+                  << std::endl;
     }
 #endif
 }
-
 
 /**
  * @brief Get a const reference to the internal clock instance.
@@ -452,6 +456,4 @@ const marinholab::sas::core::Clock& ThreadManager::get_clock() const
     return clock_;
 }
 
-
-
-}
+}  // namespace marinholab::sas::core

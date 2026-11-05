@@ -51,13 +51,14 @@ class Clock : private marinholab::sas::core::Object
 {
 public:
     /** @brief Enumeration of time types, see get_time() and get_statistics() */
-    enum class TimeType{
-        Computational, ///< Time spent between when the instant the previous sleep ended and the instant when the current one started.
-        EffectiveSampling, ///< The effective sampling time between sleeps (EffectiveSampling = Computational + Idle).
-        Idle ///< Time spent between the instant when the previous sleep started and the instant when it ended.
+    enum class TimeType
+    {
+        Computational,  ///< Time spent between when the instant the previous sleep ended and the instant when the current one started.
+        EffectiveSampling,  ///< The effective sampling time between sleeps (EffectiveSampling = Computational + Idle).
+        Idle  ///< Time spent between the instant when the previous sleep started and the instant when it ended.
     };
-private:
 
+private:
     // https://stackoverflow.com/questions/65397041/apple-clang-why-can-i-not-create-a-time-point-from-stdchrononanoseconds
     std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> time_initial_;
     std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> next_loop_deadline_;
@@ -67,26 +68,25 @@ private:
 
     const std::chrono::nanoseconds target_sampling_time_;
 
-    std::map<TimeType,std::chrono::nanoseconds> kept_times_map_;
+    std::map<TimeType, std::chrono::nanoseconds> kept_times_map_;
 
     long overrun_sampling_time_count_;
 
     const bool enable_statistics_;
 
-    std::map<std::tuple<TimeType,Statistics>,std::tuple<std::chrono::nanoseconds,long>> statistics_map_;
+    std::map<std::tuple<TimeType, Statistics>, std::tuple<std::chrono::nanoseconds, long>> statistics_map_;
     void _compute_statistics_();
 
 public:
-
-    Clock()=delete;
-    Clock(const int&)=delete;
+    Clock() = delete;
+    Clock(const int&) = delete;
 
     /**
      * @brief Construct a Clock
      * @param sampling_time_in_seconds Desired sampling time in seconds
      * @param enable_statistics Whether to enable internal statistics collection (default: true)
      */
-    explicit Clock(const double& sampling_time_in_seconds, const bool& enable_statistics=true);
+    explicit Clock(const double& sampling_time_in_seconds, const bool& enable_statistics = true);
 
     /**
      * @brief Initialize the clock internal state and timers
@@ -163,7 +163,7 @@ public:
      * @throws std::runtime_error if statistics collection was not enabled at construction
      *         or if the requested statistic is not available for the provided TimeType.
      */
-    double get_statistics(const Statistics &statistics, const TimeType &time_type) const;
+    double get_statistics(const Statistics& statistics, const TimeType& time_type) const;
 
     ///Deprecated
     [[deprecated("Use get_time(marinholab::sas::core::Clock::Computational) instead.")]]
@@ -174,8 +174,4 @@ public:
     double get_effective_thread_sampling_time_sec() const;
 };
 
-}
-
-
-
-
+}  // namespace marinholab::sas::core

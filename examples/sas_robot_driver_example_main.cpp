@@ -30,16 +30,17 @@
 #include <cassert>
 #include <iostream>
 
-#include<signal.h>
-static std::shared_ptr<marinholab::sas::core::ShutdownSignaler> shutdown_signaler = std::make_shared<marinholab::sas::core::ShutdownSignaler>();
+#include <signal.h>
+static std::shared_ptr<marinholab::sas::core::ShutdownSignaler> shutdown_signaler =
+    std::make_shared<marinholab::sas::core::ShutdownSignaler>();
 void sig_int_handler(int)
 {
     shutdown_signaler->shutdown();
 }
 
-int main(int,char**)
+int main(int, char**)
 {
-    if(signal(SIGINT, sig_int_handler) == SIG_ERR)
+    if (signal(SIGINT, sig_int_handler) == SIG_ERR)
     {
         throw std::runtime_error("sas_robot_driver_example_main::Error setting the signal int handler.");
     }
@@ -59,7 +60,8 @@ int main(int,char**)
     std::cout << "Target joint positions: " << target_joint_positions.transpose() << std::endl;
 
     robot_driver_example.set_target_joint_positions(target_joint_positions);
-    std::cout << "Joint positions after change: " << robot_driver_example.get_joint_positions().transpose() << std::endl;
+    std::cout << "Joint positions after change: " << robot_driver_example.get_joint_positions().transpose()
+              << std::endl;
 
     assert((target_joint_positions == robot_driver_example.get_joint_positions()));
 

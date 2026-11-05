@@ -35,7 +35,6 @@
 #include <marinholab/sas/core/sas_robot_driver.hpp>
 #include <Eigen/Dense>
 
-
 namespace marinholab::sas::core
 {
 /**
@@ -48,7 +47,7 @@ struct RobotDriverExampleConfiguration
 {
     std::string name;
     Eigen::VectorXd initial_joint_positions;
-    std::tuple<Eigen::VectorXd,Eigen::VectorXd> joint_limits;
+    std::tuple<Eigen::VectorXd, Eigen::VectorXd> joint_limits;
 };
 
 /**
@@ -58,7 +57,7 @@ struct RobotDriverExampleConfiguration
  * the RobotDriver interface. It is intended for unit tests and examples and
  * simulates joint state updates using the provided configuration.
  */
- class RobotDriverExample: public RobotDriver
+class RobotDriverExample : public RobotDriver
 {
 protected:
     const RobotDriverExampleConfiguration configuration_;
@@ -66,15 +65,18 @@ protected:
 
 public:
     RobotDriverExample(RobotDriverExample&) = delete;
-    RobotDriverExample()=delete;
+    RobotDriverExample() = delete;
 
     /**
      * @brief Construct a RobotDriverExample with configuration
      * @param configuration Example configuration (name, initial positions, joint limits)
      * @param break_loops Optional pointer to an atomic_bool used to break loops
      */
-    RobotDriverExample(const RobotDriverExampleConfiguration& configuration, const std::shared_ptr<ShutdownSignaler>& shutdown_signaler_);
-    [[deprecated("Use RobotDriverExample(const RobotDriverExampleConfiguration& configuration, const std::shared_ptr<ShutdownSignaler>& shutdown_signaler_) instead.")]]
+    RobotDriverExample(const RobotDriverExampleConfiguration& configuration,
+                       const std::shared_ptr<ShutdownSignaler>& shutdown_signaler_);
+    [[deprecated(
+        "Use RobotDriverExample(const RobotDriverExampleConfiguration& configuration, const "
+        "std::shared_ptr<ShutdownSignaler>& shutdown_signaler_) instead.")]]
     RobotDriverExample(const RobotDriverExampleConfiguration& configuration, std::atomic_bool* break_loops);
 
     /**
@@ -110,4 +112,4 @@ public:
      */
     virtual void deinitialize() override;
 };
-}
+}  // namespace marinholab::sas::core

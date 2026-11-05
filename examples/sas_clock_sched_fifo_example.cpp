@@ -51,19 +51,21 @@ int main(int, char**)
     int policy;
     pthread_getschedparam(pthread_self(), &policy, &sch);
     sch.sched_priority = 20;
-    if (pthread_setschedparam(pthread_self(), SCHED_FIFO, &sch)) {
+    if (pthread_setschedparam(pthread_self(), SCHED_FIFO, &sch))
+    {
         std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
     }
 #else
     // Real-time scheduling (SCHED_FIFO) is not available on this platform;
     // the loop below still exercises the Clock timing path.
     std::cout << "Note: SCHED_FIFO not available on this platform; "
-                 "running the timing loop with default scheduling." << std::endl;
+                 "running the timing loop with default scheduling."
+              << std::endl;
 #endif
 
     // Always initialize right before the loop, to reduce slowdown in the object allocation/initialization.
     clock.init();
-    for(int i=0;i<50;i++)
+    for (int i = 0; i < 50; i++)
     {
         // Starting the loop with an update reduces overhead when entering the loop the first time.
         clock.update_and_sleep();
@@ -71,9 +73,18 @@ int main(int, char**)
 
     //Statistics
     std::cout << "Statistics for the entire loop" << std::endl;
-    std::cout << "  Mean computation time: " << clock.get_statistics(marinholab::sas::core::Statistics::Mean,marinholab::sas::core::Clock::TimeType::Computational) << std::endl;
-    std::cout << "  Mean idle time: " << clock.get_statistics(marinholab::sas::core::Statistics::Mean,marinholab::sas::core::Clock::TimeType::Idle) << std::endl;
-    std::cout << "  Mean effective thread sampling time: " << clock.get_statistics(marinholab::sas::core::Statistics::Mean,marinholab::sas::core::Clock::TimeType::EffectiveSampling) << std::endl;
+    std::cout << "  Mean computation time: "
+              << clock.get_statistics(marinholab::sas::core::Statistics::Mean,
+                                      marinholab::sas::core::Clock::TimeType::Computational)
+              << std::endl;
+    std::cout << "  Mean idle time: "
+              << clock.get_statistics(marinholab::sas::core::Statistics::Mean,
+                                      marinholab::sas::core::Clock::TimeType::Idle)
+              << std::endl;
+    std::cout << "  Mean effective thread sampling time: "
+              << clock.get_statistics(marinholab::sas::core::Statistics::Mean,
+                                      marinholab::sas::core::Clock::TimeType::EffectiveSampling)
+              << std::endl;
     std::cout << "  Overrun count: " << clock.get_overrun_count() << std::endl << std::endl;
 
     return 0;

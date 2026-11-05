@@ -26,13 +26,12 @@
 #include <iostream>
 #include <thread>
 
-int main() {
+int main()
+{
     int counter = 0;
 
     // Create and start thread
-    marinholab::sas::core::ThreadManager tm("test", 0.1, [&counter]() {
-        std::cout << ++counter << "\n";
-    });
+    marinholab::sas::core::ThreadManager tm("test", 0.1, [&counter]() { std::cout << ++counter << "\n"; });
 
     tm.start();
 
