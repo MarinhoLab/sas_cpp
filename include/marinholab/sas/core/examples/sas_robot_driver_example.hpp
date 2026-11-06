@@ -70,14 +70,10 @@ public:
     /**
      * @brief Construct a RobotDriverExample with configuration
      * @param configuration Example configuration (name, initial positions, joint limits)
-     * @param break_loops Optional pointer to an atomic_bool used to break loops
+     * @param shutdown_signaler Shared shutdown signaler owned by the node
      */
     RobotDriverExample(const RobotDriverExampleConfiguration& configuration,
                        const std::shared_ptr<ShutdownSignaler>& shutdown_signaler_);
-    [[deprecated(
-        "Use RobotDriverExample(const RobotDriverExampleConfiguration& configuration, const "
-        "std::shared_ptr<ShutdownSignaler>& shutdown_signaler_) instead.")]]
-    RobotDriverExample(const RobotDriverExampleConfiguration& configuration, std::atomic_bool* break_loops);
 
     /**
      * @brief Get the current joint positions
