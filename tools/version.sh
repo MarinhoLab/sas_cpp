@@ -17,7 +17,12 @@ set -euo pipefail
 YYMM="$(date +%y.%m)"
 
 NN=0
-if command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
+if [ -n "${SAS_CPP_NN:-}" ]; then
+    # Git-less build contexts (docker/Dockerfile strips .git via
+    # Dockerfile.dockerignore) pass the count in as a build arg. Only the
+    # deb builder publishes real versions; it always has git.
+    NN="${SAS_CPP_NN}"
+elif command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
     NN="$(git rev-list HEAD --count 2>/dev/null || echo 0)"
     if [ "${NN}" -eq 0 ]; then
         echo "ERROR: no commits visible (shallow clone?) - refusing to stamp a non-advancing version" >&2
